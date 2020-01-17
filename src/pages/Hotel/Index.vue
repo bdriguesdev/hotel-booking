@@ -184,6 +184,7 @@ export default {
 
 <style lang='scss'>
     @import '../../scss/variables.scss';
+    @import '../../scss/mixins.scss';
 
     .hotel__content {
         width: 90%;
@@ -381,6 +382,9 @@ export default {
                 grid-auto-rows: auto; 
                 grid-template-columns: repeat(auto-fill, minmax(300px, 0.5fr));
                 grid-gap: 2rem;
+                @include small-phone {
+                    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+                }
             }
         }
 

@@ -226,6 +226,7 @@ export default {
 
 <style lang='scss'>
     @import '../../scss/variables.scss';
+    @import '../../scss/mixins.scss';
 
     .room__content {
         width: 90%;
@@ -355,6 +356,11 @@ export default {
                 justify-content: space-between;
                 align-items: flex-end;
                 margin-bottom: 25px;
+                flex-wrap: wrap;
+                @include large-phone {
+                    flex-direction: column;
+                    align-items: flex-start;
+                }
 
                 .room__title__left {
                     display: flex;
@@ -382,6 +388,7 @@ export default {
                             font-weight: 300;
                             font-size: 1.563rem;
                             text-transform: uppercase;
+                            text-align: left;
                         }
                     }
                 }
@@ -390,11 +397,24 @@ export default {
                     display: flex;
                     align-self: center;
                     align-items: center;
+                    flex-wrap: wrap;
+                    @include large-phone {
+                        margin-top: 25px;
+                        flex-direction: row-reverse;
+                        align-self: flex-start;
+                    }
+                    @include small-phone {
+                        align-self: center;
+                        justify-content: center;
+                    }
                     
                     .room__people {
                         margin-right: 20px;
                         display: flex;
                         align-items: center;
+                        @include small-phone {
+                            margin-right: 0;
+                        }
 
                         span {
                             color: $secondary-color-two;
@@ -404,7 +424,7 @@ export default {
                             margin-left: 5px;
                             margin-top: 4px;
                         }
-                    }
+                    } 
 
                     .room__price {
                         color: $secondary-color-two;
@@ -418,6 +438,12 @@ export default {
                         background-color: $divisor-color;
                         height: 40px;
                         margin-right: 20px;
+                        @include large-phone {
+                            margin-left: 25px;
+                        }
+                        @include medium-phone {
+                            display: none;
+                        }
                     }
 
                     .room__booking--btn {
@@ -435,6 +461,15 @@ export default {
                         animation: btn-appears-animation 1000ms ease-in-out 1;
                         animation-fill-mode: forwards;
                         animation-delay: 150ms;
+                        @include tablet {
+                            width: 145px;
+                        }
+                        @include medium-phone {
+                            margin-right: 10px;
+                        }
+                        @include small-phone {
+                            margin-top: 10px;
+                        }   
 
                         span {
                             margin-right: 5px;
@@ -442,6 +477,9 @@ export default {
                             color: $primary-color;
                             position: relative;
                             z-index: 2;
+                            @include tablet {
+                                font-size: 1.1rem;
+                            }
                         }
 
                         span:after {

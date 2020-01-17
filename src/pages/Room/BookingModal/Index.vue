@@ -162,6 +162,7 @@ export default {
 
 <style lang='scss'>
     @import '../../../scss/variables.scss';
+    @import '../../../scss/mixins.scss';
 
     .booking__modal {
         top: 0;
@@ -178,6 +179,12 @@ export default {
             width: 710px;
             margin: 0 auto;
             margin-top: 10vh;
+            @include large-phone {
+                width: 350px;
+            }
+            @include small-phone {
+                width: 280px;
+            }
 
             .booking__nav {
                 background-color: $secondary-color-two;
@@ -229,6 +236,9 @@ export default {
                     display: flex;
                     flex-wrap: wrap;
                     justify-content: space-between;
+                    @include large-phone {
+                        justify-content: center;
+                    }
                     
                     label {
                         font-family: $secondary-font;
@@ -239,6 +249,9 @@ export default {
                         margin: 8px 0px;
                         display: flex;
                         flex-direction: column;
+                        @include small-phone {
+                            width: 232px;
+                        }
                     }
 
                     .input__date__container {
@@ -296,6 +309,9 @@ export default {
                                 font-weight: 300;
                                 font-size: 1rem;
                                 text-align: left;
+                                @include small-phone {
+                                    min-width: 80px;
+                                }
                             }
 
                             .booking__price-line {
@@ -422,6 +438,9 @@ export default {
                     top: 13px;
                     left: 29px;
                     color: $shadow-color;
+                    @include desktop {
+                        left: 34px;
+                    }
                 }
             }
         }

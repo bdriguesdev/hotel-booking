@@ -25,6 +25,7 @@ export default {
 
 <style lang='scss'>
     @import '../../scss/variables.scss';
+    @import '../../scss/mixins.scss';
 
     .hotel__room__card {
         margin: 10px;
@@ -38,6 +39,9 @@ export default {
             width: 100%;
             height: 160px;
             transition: 300ms ease-in-out;
+            @include small-phone {
+                height: 130px;
+            }
         }
 
         .room__card__information {

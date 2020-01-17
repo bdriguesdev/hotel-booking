@@ -42,6 +42,7 @@ export default {
 
 <style lang='scss'>
     @import '../scss/variables.scss';
+    @import '../scss/mixins.scss';
 
     .room__review {
         padding: 0;
@@ -71,6 +72,7 @@ export default {
                     color: $secondary-color-two;
                     font-weight: 300;
                     font-size: 1.25rem;
+                    text-align: left;
                 }
 
                 span {
@@ -78,10 +80,17 @@ export default {
                     font-weight: 400;
                     font-size: 0.875rem;
                     color: $gray-text-color;
+                    text-align: left;
                 }
 
                 .room__review_stars {
                     margin-top: auto;
+                    svg {
+                        @include small-phone {
+                            width: 18px;
+                            height: 15px;
+                        }
+                    }
                 }
             }
         }
@@ -102,6 +111,11 @@ export default {
                 background-color: $input-bg-color;
                 padding: 20px;
                 width: 90%;
+            }
+            img {
+                @include small-phone {
+                    width: 5%;
+                }
             }
         }
     }
