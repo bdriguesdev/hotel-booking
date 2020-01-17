@@ -108,6 +108,7 @@ export default {
 
 <style lang='scss'>
     @import '../../../scss/variables.scss';
+    @import '../../../scss/mixins.scss';
 
     .hotels__create__modal {
         top: 0;
@@ -124,6 +125,12 @@ export default {
             width: 670px;
             margin: 0 auto;
             margin-top: 10vh;
+            @include large-phone {
+                width: 350px;
+            }
+            @include small-phone {
+                width: 280px;
+            }
 
             .hotels__create__nav {
                 background-color: $secondary-color-two;
@@ -175,7 +182,9 @@ export default {
                     display: flex;
                     flex-wrap: wrap;
                     justify-content: space-between;
-                    background-color: red;
+                    @include small-phone {
+                        justify-content: center;
+                    }
                     
                     label {
                         font-family: $secondary-font;
@@ -187,12 +196,14 @@ export default {
                         display: flex;
                         flex-direction: column;
                         align-items: flex-start;
+                        @include small-phone {
+                            width: 232px;
+                        }
                         
                         input {
                             background-color: $input-bg-color;
                             border: none;
                             width: 263px;
-                            padding-left: 12px;
                             height: 42px;
                             border-bottom: 2px solid $secondary-color-two;
                             outline: none;
@@ -200,11 +211,15 @@ export default {
                             color: $input-text-color;
                             box-shadow: inset 0px 0px 10px rgba(0,0,0,0.05);
                             border-radius: 0;
+                            @include small-phone {
+                                width: 220px;
+                            }
                         }
 
                         textarea {
                             width: 568px;
                             max-width: 568px;
+                            min-width: 568px;
                             height: 88px;
                             outline: none;
                             font-size: 1rem;
@@ -215,6 +230,16 @@ export default {
                             border: none;
                             box-shadow: inset 0px 0px 10px rgba(0,0,0,0.05);
                             border-bottom: 2px solid $secondary-color-two;
+                            @include large-phone {
+                                width: 248px;
+                                min-width: 248px;
+                                max-width: 248px;
+                            }
+                            @include small-phone {
+                                width: 206px;
+                                min-width: 206px;
+                                max-width: 206px;
+                            }
                         }
                     }
                 }
@@ -268,6 +293,9 @@ export default {
                     top: 13px;
                     left: 23px;
                     color: $shadow-color;
+                    @include desktop {
+                        left: 28px;
+                    }
                 }
             }
         }

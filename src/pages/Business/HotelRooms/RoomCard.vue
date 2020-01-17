@@ -38,6 +38,7 @@ export default {
 
 <style lang='scss'>
     @import '../../../scss/variables.scss';
+    @import '../../../scss/mixins.scss';
 
     .room__card {
         box-shadow: 0 0 15px rgba(0,0,0,0.08);
@@ -48,8 +49,11 @@ export default {
             background-size: 100%;
             background-position: center; 
             width: 100%;
-            height: 210px;
+            height: 200px;
             transition: 300ms ease-in-out;
+            @include small-phone {
+                height: 160px;
+            }
         }
 
         .room__card__info {

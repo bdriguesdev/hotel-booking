@@ -137,6 +137,7 @@ export default {
 
 <style lang='scss'>
     @import '../../../scss/variables.scss';
+    @import '../../../scss/mixins.scss';
 
     .hotel__modal {
         top: 0;
@@ -153,6 +154,12 @@ export default {
             width: 670px;
             margin: 0 auto;
             margin-top: 10vh;
+            @include large-phone {
+                width: 350px;
+            }
+            @include small-phone {
+                width: 280px;
+            }
 
             .hotel__nav {
                 background-color: $secondary-color-two;
@@ -204,6 +211,9 @@ export default {
                     display: flex;
                     flex-wrap: wrap;
                     justify-content: space-between;
+                    @include large-phone {
+                        justify-content: center;
+                    }
                     
                     label {
                         font-family: $secondary-font;
@@ -217,12 +227,14 @@ export default {
                         align-items: flex-start;
                         justify-content: flex-start;
                         width: 275px;
+                        @include small-phone {
+                            width: 232px;
+                        }
                         
                         input {
                             background-color: $input-bg-color;
                             border: none;
                             width: 263px;
-                            padding-left: 12px;
                             height: 42px;
                             border-bottom: 2px solid $secondary-color-two;
                             outline: none;
@@ -240,6 +252,9 @@ export default {
                             height: 270px;
                             box-shadow: 0 0 10px rgba(0,0,0,0.08);
                             position: relative;
+                            @include small-phone {
+                                width: 232px;
+                            }
 
                             .hotel__photo__btn {
                                 text-transform: none;
@@ -282,6 +297,9 @@ export default {
                                 top: 13px;
                                 left: 38px;
                                 color: $shadow-color;
+                                @include desktop {
+                                    left: 41px;
+                                }
                             }
                         }
 
@@ -326,16 +344,6 @@ export default {
                             }
                         }
                     }
-                }
-
-                .hotel__rooms__btn::after {
-                    content: 'View rooms';
-                    position: absolute;
-                    z-index: -1;
-                    font-size: 1.063rem;
-                    top: 13px;
-                    left: 22px;
-                    color: $shadow-color;
                 }
             }
 
@@ -388,6 +396,9 @@ export default {
                 top: 13px;
                 left: 28px;
                 color: $shadow-color;
+                @include desktop {
+                    left: 30px;
+                }
             }
         }
     }

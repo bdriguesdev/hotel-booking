@@ -1,3 +1,6 @@
+@mixin micro-phone {
+    @media (max-width: 350px) { @content; }
+}
 @mixin small-phone {
     @media (max-width: 410px) { @content; }
 }

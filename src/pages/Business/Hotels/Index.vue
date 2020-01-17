@@ -142,6 +142,7 @@ export default {
 
 <style lang='scss'>
     @import '../../../scss/variables.scss';
+    @import '../../../scss/mixins.scss';
 
     .business__hotels__content {
         max-width: 1800px;
@@ -152,6 +153,9 @@ export default {
         .business__hotels__title {
             display: flex;
             justify-content: flex-start;
+            @include small-phone {
+                flex-direction: column;
+            }
 
             .business__hotels__number--container {
                 width: 87px;
@@ -186,6 +190,9 @@ export default {
                     font-family: $secondary-font;
                     margin-left: 15px;
                     text-transform: uppercase;
+                    @include large-phone {
+                        font-size: 1.7rem;
+                    }
                 }
 
                 .business__hotels__line {
@@ -249,6 +256,12 @@ export default {
                 top: 13px;
                 left: 21px;
                 color: $shadow-color;
+                @include desktop {
+                    left: 24px;
+                }
+                @include micro-phone {
+                    display: none;
+                }
             }
 
             .create-btn {
@@ -263,16 +276,23 @@ export default {
                 top: 13px;
                 left: 21px;
                 color: $shadow-color;
+                @include desktop {
+                    left: 23px;
+                }
+                @include micro-phone {
+                    display: none;
+                }
             }
         }
-
-        
 
         .business__hotels__cards {
             display: grid;
             grid-auto-rows: auto; 
             grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
             grid-gap: 2rem;
+            @include small-phone {
+                grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            }
         }
     }
 

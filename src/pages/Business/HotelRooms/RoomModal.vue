@@ -133,6 +133,7 @@ export default {
 
 <style lang='scss'>
     @import '../../../scss/variables.scss';
+    @import '../../../scss/mixins.scss';
 
     .room__modal {
         top: 0;
@@ -149,6 +150,12 @@ export default {
             width: 670px;
             margin: 0 auto;
             margin-top: 10vh;
+            @include large-phone {
+                width: 350px;
+            }
+            @include small-phone {
+                width: 280px;
+            }
 
             .room__nav {
                 background-color: $secondary-color-two;
@@ -216,6 +223,9 @@ export default {
                     display: flex;
                     flex-wrap: wrap;
                     justify-content: space-between;
+                    @include large-phone {
+                        justify-content: center;
+                    }
                     
                     label {
                         font-family: $secondary-font;
@@ -229,19 +239,8 @@ export default {
                         align-items: flex-start;
                         justify-content: flex-start;
                         width: 275px;
-                        
-                        input {
-                            background-color: $input-bg-color;
-                            border: none;
-                            width: 263px;
-                            padding-left: 12px;
-                            height: 42px;
-                            border-bottom: 2px solid $secondary-color-two;
-                            outline: none;
-                            font-size: 1rem;
-                            color: $input-text-color;
-                            box-shadow: inset 0px 0px 10px rgba(0,0,0,0.05);
-                            border-radius: 0;
+                        @include small-phone {
+                            width: 232px;
                         }
     
                         .room__photo {
@@ -252,6 +251,9 @@ export default {
                             height: 270px;
                             box-shadow: 0 0 10px rgba(0,0,0,0.08);
                             position: relative;
+                            @include small-phone {
+                                width: 232px;
+                            }
 
                             .room__photo__btn {
                                 text-transform: none;
@@ -294,6 +296,9 @@ export default {
                                 top: 13px;
                                 left: 38px;
                                 color: $shadow-color;
+                                @include desktop {
+                                    left: 41px;
+                                }
                             }
                         }
 
@@ -349,6 +354,9 @@ export default {
                     top: 13px;
                     left: 28px;
                     color: $shadow-color;
+                    @include desktop {
+                        left: 30px;
+                    }
                 }
             }
         }
@@ -383,6 +391,7 @@ export default {
                         color: $secondary-color-two;
                         font-weight: 300;
                         font-size: 1.25rem;
+                        text-align: left;
                     }
 
                     span {
@@ -390,12 +399,14 @@ export default {
                         font-weight: 400;
                         font-size: 0.875rem;
                         color: $gray-text-color;
+                        text-align: left;
                     }
 
                     .booking__information__price {
                         margin-top: 5px;
                         font-weight: 300;
                         color: $secondary-color-two;
+                        text-align: left;
                     }
                 }
             }

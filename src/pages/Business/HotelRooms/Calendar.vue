@@ -202,10 +202,14 @@ export default {
 
 <style lang='scss'>
     @import '../../../scss/variables.scss';
+    @import '../../../scss/mixins.scss';
 
     .calendar__container {
         width: 275px;
         box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        @include small-phone {
+            width: 232px;
+        }
 
         .calendar__options {
             padding: 0 9px;
