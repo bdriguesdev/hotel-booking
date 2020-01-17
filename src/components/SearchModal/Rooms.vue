@@ -84,6 +84,7 @@ export default {
 
 <style lang='scss'>
     @import '../../scss/variables.scss';
+    @import '../../scss/mixins.scss';
 
     .search__form {
         padding-top: 28px;
@@ -105,6 +106,9 @@ export default {
                 text-align: left;
                 width: 261px;
                 margin: 8px 15px;
+                @include small-phone {
+                    width: 232px;
+                }
 
                 input {
                     background-color: $input-bg-color;
@@ -118,6 +122,9 @@ export default {
                     color: $input-text-color;
                     box-shadow: inset 0px 0px 10px rgba(0,0,0,0.05);
                     border-radius: 0;
+                    @include small-phone {
+                        width: 220px;
+                    }
                 }
 
                 input[type=date] {
@@ -130,6 +137,13 @@ export default {
                     
                     input {
                         width: 110px;
+                        @include small-phone {
+                            width: 90px;
+                        }
+                    }
+
+                    input:last-child {
+                        margin-right: 30px;
                     }
                 }
             }
@@ -188,7 +202,11 @@ export default {
             top: 13px;
             left: 22px;
             color: $shadow-color;
+            @include desktop {
+                left: 23px;
+            }
         }
     }
+    
         
 </style>

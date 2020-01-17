@@ -69,6 +69,7 @@ export default {
 
 <style lang='scss'>
     @import '../../scss/variables.scss';
+    @import '../../scss/mixins.scss';
 
     .register__modal {
         top: 0;
@@ -85,6 +86,12 @@ export default {
             width: 670px;
             margin: 0 auto;
             margin-top: 10vh;
+            @include large-phone {
+                width: 350px;
+            }
+            @include small-phone {
+                width: 280px;
+            }
 
             .register__nav {
                 background-color: $secondary-color-two;
@@ -156,6 +163,9 @@ export default {
                     text-align: left;
                     width: 261px;
                     margin: 8px 15px;
+                    @include small-phone {
+                        width: 232px;
+                    }
 
                     input {
                         background-color: $input-bg-color;
@@ -169,6 +179,9 @@ export default {
                         color: $input-text-color;
                         box-shadow: inset 0px 0px 10px rgba(0,0,0,0.05);
                         border-radius: 0;
+                        @include small-phone {
+                            width: 220px;
+                        }
                     }
 
                     input[type=date] {
@@ -225,6 +238,9 @@ export default {
                     top: 13px;
                     left: 17px;
                     color: $shadow-color;
+                    @include desktop {
+                        left: 23px;
+                    }
                 }
             }
         }

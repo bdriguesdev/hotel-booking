@@ -129,6 +129,12 @@ export default {
             width: 383px;
             margin: 0 auto;
             margin-top: 10vh;
+            @include large-phone {
+                width: 350px;
+            }
+            @include small-phone {
+                width: 280px;
+            }
 
             .login__nav {
                 background-color: $secondary-color-two;
@@ -187,6 +193,9 @@ export default {
                     text-align: left;
                     width: 261px;
                     margin: 8px 15px;
+                    @include small-phone {
+                        width: 232px;
+                    }
 
                     input[type=email], input[type=password] {
                         background-color: $input-bg-color;
@@ -201,14 +210,9 @@ export default {
                         box-shadow: inset 0px 0px 10px rgba(0,0,0,0.05);
                         border-radius: 0;
                         transition: 250ms ease-in-out;
-                    }
-
-                    input[type=date] {
-                        height: 44px;
-                    }
-
-                    input:nth-child(2) {
-                        background-color: red;
+                        @include small-phone {
+                            width: 220px;
+                        }
                     }
 
                     .login__radio__container {
