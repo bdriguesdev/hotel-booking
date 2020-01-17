@@ -80,15 +80,22 @@ export default {
         }
     },
     mounted() {
-        const slideInformation = document.querySelector('.slide__information');
-        const slideInformationShadow = document.querySelector('.slide__information--box-shadow');
-        const slide = document.querySelector('.introductory__slide');
-        slideInformationShadow.style.top = slideInformation.offsetTop + slide.offsetTop + 'px';
-        slideInformationShadow.hidden = false;
+        this.fixSlideBoxShadow();
         /* eslint-disable no-console */
         this.setNewSlideInterval();
+        window.addEventListener('resize', this.fixSlideBoxShadow);
+    },
+    beforeDestroy() {
+        window.removeEventListener('resize', this.fixSlideBoxShadow);
     },
     methods: {
+        fixSlideBoxShadow() {
+            const slideInformation = document.querySelector('.slide__information');
+            const slideInformationShadow = document.querySelector('.slide__information--box-shadow');
+            const slide = document.querySelector('.introductory__slide');
+            slideInformationShadow.style.top = slideInformation.offsetTop + slide.offsetTop + 'px';
+            slideInformationShadow.hidden = false;
+        },
         handleRegister() {
             this.$emit('modal', 'register');
             window.scrollTo(0,0);
@@ -181,6 +188,7 @@ export default {
 
 <style lang='scss'> 
     @import '../../scss/variables.scss';
+    @import '../../scss/mixins.scss';
 
     .introductory {
         max-width: 1800px;
@@ -188,6 +196,10 @@ export default {
         margin: 0 auto;
         position: relative;
         height: 93vh;
+        @include large-phone {
+            height: 650px;
+        }
+        
 
         .introductory__text {
             max-width: 640px;
@@ -198,6 +210,9 @@ export default {
             padding-top: 25vh;
             position: relative;
             z-index: 1;
+            @include large-phone {
+                display: none;
+            }
 
             .introductory__text--white {
                 background-color: $primary-color;
@@ -215,6 +230,9 @@ export default {
                 animation-delay: 300ms;
                 animation-fill-mode: forwards;
                 color: $secondary-color-two;
+                @include tablet {
+                    font-size: 1.7rem;
+                }
             }
 
             @keyframes white-text {
@@ -237,6 +255,9 @@ export default {
                 animation: black-text 1000ms ease-in-out 1;
                 animation-fill-mode: forwards;
                 animation-delay: 350ms;
+                @include tablet {
+                    font-size: 1.7rem;
+                }
             }
 
             @keyframes black-text {
@@ -261,6 +282,12 @@ export default {
                 animation: btn-appears-animation 1000ms ease-in-out 1;
                 animation-fill-mode: forwards;
                 animation-delay: 150ms;
+                @include tablet {
+                    width: 155px;
+                }
+                @include large-phone {
+                    align-self: center;
+                }
 
                 span {
                     margin-right: 5px;
@@ -268,6 +295,9 @@ export default {
                     color: $primary-color;
                     position: relative;
                     z-index: 2;
+                    @include tablet {
+                        font-size: 1.1rem;
+                    }
                 }
 
                 span:after {
@@ -320,6 +350,12 @@ export default {
             right: 5%;
             top: 10vh;
             overflow: hidden;
+            @include large-phone {
+                width: 100%;
+                top: 60px;
+                left: 0;
+                right: auto;
+            }
 
             .slide__images {
                 display: flex;
@@ -333,6 +369,9 @@ export default {
                     background-size: cover;
                     width: 100%;
                     height: 70vh;
+                    @include large-phone {
+                        height: 500px;
+                    }
                 }
 
                 .slide__image--two {
@@ -340,6 +379,9 @@ export default {
                     background-size: cover;
                     width: 100%;
                     height: 70vh;
+                    @include large-phone {
+                        height: 500px;
+                    }
                 }
 
                 .slide__image--three {
@@ -347,6 +389,9 @@ export default {
                     background-size: cover;
                     width: 100%;
                     height: 70vh;
+                    @include large-phone {
+                        height: 500px;
+                    }
                 }
             }
 
@@ -431,6 +476,9 @@ export default {
             z-index: -1;
             right: 5%;
             box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.15);
+            @include large-phone {
+                right: 0;
+            }
         }
 
         .slide__arrow {
@@ -448,6 +496,10 @@ export default {
             box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
             z-index: 2;
             cursor: pointer;
+            @include large-phone {
+                top: calc(60px + 250px);
+                transform: translateY(-50%);
+            }
 
             .slide__arrow--container {
                 display: flex;
@@ -488,6 +540,9 @@ export default {
             bottom: 5vh;
             left: 50%;
             transform: translateX(-50%);
+            @include large-phone {
+                top: calc(60px + 520px);
+            }
 
             svg:nth-child(2) {
                 margin: 0 10px;

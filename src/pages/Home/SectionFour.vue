@@ -79,7 +79,7 @@ export default {
                this.isSectionTitleAnimated = true;
 
                 const titleNumber = document.querySelector('.join__number');
-                titleNumber.style.top = '-41px';
+                titleNumber.style.top = '-38px';
 
                 const titleNumberBorder = document.querySelector('.join__number--border');
                 titleNumberBorder.style.width = '100%';
@@ -110,6 +110,7 @@ export default {
 
 <style lang='scss'>
     @import '../../scss/variables.scss';
+    @import '../../scss/mixins.scss';
 
     .join__container {
         max-width: 1800px;
@@ -123,6 +124,9 @@ export default {
             justify-content: flex-start;
             margin-bottom: 65px;
             margin-right: 5%;
+            @include large-phone {
+                flex-direction: column;
+            }
 
             .join__number--container {
                 width: 87px;
@@ -162,12 +166,18 @@ export default {
                     margin-left: 10px;
                     font-size: 1.875rem;
                     font-weight: 400;
+                    @include large-phone {
+                        font-size: 1.7rem;
+                    }
 
                     span {
                         color: $secondary-color-two;
                         font-size: 1.875rem;
                         font-weight: 300;
                         font-family: $secondary-font;
+                        @include large-phone {
+                            font-size: 1.7rem;
+                        }
                     }
                 }
 
@@ -175,6 +185,7 @@ export default {
                     visibility: hidden;
                     min-width: 80%;
                     width: 367px;
+                    max-width: 95%;
                     height: 3px;
                     background-color: $secondary-color-two;
                 }
@@ -184,14 +195,19 @@ export default {
         .join__content {
             display: flex;
             justify-content: center;
+            position: relative;
 
             .join__image {
                 background-color: lightgray;
                 background-image: url('../../assets/Join_Community_image.jpg');
                 width: 821px;
-                height: 451px;
+                min-height: 451px;
                 background-size: cover;
                 background-position: center;
+                @include medium-phone {
+                    width: 90%;
+                    height: 300px;
+                }
 
                 img {
                     background-color: $primary-color;
@@ -209,6 +225,15 @@ export default {
                 justify-content: flex-start;
                 flex-grow: 0;
                 opacity: 0;
+                @include tablet {
+                    margin-left: -300px;
+                }
+                @include medium-phone {
+                    position: absolute;
+                    right: 0;
+                    top: 350px;
+                    margin: 0;
+                }
 
                 .join__secondary-title {
                     color: $primary-color;
@@ -221,6 +246,9 @@ export default {
                     box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
                     display: inline-block;
                     margin-bottom: 35px;
+                    @include tablet {
+                        font-size: 1.7rem;
+                    }
                 }
 
                 .join__paragraph {
@@ -252,6 +280,9 @@ export default {
                     animation: btn-appears-animation 1000ms ease-in-out 1;
                     animation-fill-mode: forwards;
                     animation-delay: 150ms;
+                    @include tablet {
+                        width: 155px;
+                    }
 
                     span {
                         margin-right: 5px;
@@ -259,6 +290,9 @@ export default {
                         color: $primary-color;
                         position: relative;
                         z-index: 2;
+                        @include tablet {
+                            font-size: 1.1rem;
+                        }
                     }
 
                     span:after {

@@ -134,7 +134,7 @@ export default {
                 this.isSectionTitleAnimated = true;
 
                 const titleNumber = document.querySelector('.hotels-cards__number');
-                titleNumber.style.top = '-41px';
+                titleNumber.style.top = '-38px';
 
                 const titleNumberBorder = document.querySelector('.hotels-cards__number--border');
                 titleNumberBorder.style.width = '100%';
@@ -166,6 +166,14 @@ export default {
         sectionWidth(newValue) {
             const roomCardsContainer = document.querySelector('.hotels-cards__cards');
             const roomCard = document.querySelector('.hotels-cards__card');
+            // //eslint-disable-next-line
+            // console.log(roomCard.getBoundingClientRect().width, roomCard.offsetLeft);
+            // const roomCardsContainerWidth = roomCard.getBoundingClientRect().width * 4 + roomCard.offsetLeft * 8;
+            // //eslint-disable-next-line
+            // console.log(roomCardsContainerWidth);
+
+            // roomCardsContainer.style.width = roomCardsContainerWidth + 'px';
+
             const leftValue = ((roomCardsContainer.getBoundingClientRect().width - newValue) + newValue / 2) - (roomCard.offsetLeft + roomCard.getBoundingClientRect().width / 2);
             const cardPosition = (4 - this.card) * (roomCard.offsetLeft * 2 + roomCard.getBoundingClientRect().width);
             roomCardsContainer.style.left = -leftValue + cardPosition + 'px';
@@ -205,6 +213,7 @@ export default {
 
 <style lang='scss'>
     @import '../../scss/variables.scss';
+    @import '../../scss/mixins.scss';
 
     .hotels-cards {
         max-width: 1900px;
@@ -218,6 +227,10 @@ export default {
             justify-content: flex-end;
             margin-bottom: 45px;
             margin-right: 5%;
+            @include large-phone {
+                flex-direction: column;
+                align-items: flex-end;
+            }
 
             .hotels-cards__number--container {
                 width: 87px;
@@ -241,7 +254,6 @@ export default {
                     position: absolute;
                     left: -13px;
                     top: -150px;
-                    position: blue;
                     transition: 800ms ease-in-out;
                 }
             }
@@ -250,6 +262,7 @@ export default {
                 display: flex;
                 flex-direction: column;
                 justify-content: flex-end;
+                max-width: 95%;
                 
                 h2 {
                     margin: 0;
@@ -258,12 +271,18 @@ export default {
                     margin-left: 10px;
                     font-size: 1.875rem;
                     font-weight: 400;
+                    @include large-phone {
+                        font-size: 1.7rem;
+                    }
 
                     span {
                         color: $secondary-color-two;
                         font-size: 1.875rem;
                         font-weight: 300;
                         font-family: $secondary-font;
+                        @include large-phone {
+                            font-size: 1.7rem;
+                        }
                     }
                 }
 
@@ -271,6 +290,7 @@ export default {
                     min-width: 80%;
                     visibility: hidden;
                     width: 367px;
+                    max-width: 95%;
                     height: 3px;
                     background-color: $secondary-color-two;
                 }
@@ -287,6 +307,13 @@ export default {
                 display: flex;
                 margin: 0 auto;
                 width: 2360px;
+                @include medium-phone {
+                    width: 1640px;
+                }
+                @include small-phone {
+                    width: 1200px;
+                }
+
 
                 .hotels-cards__card {
                     width: 450px;
@@ -294,6 +321,14 @@ export default {
                     margin: 0 70px;
                     background-color: $primary-color;
                     cursor: pointer;
+                    @include medium-phone {
+                        width: 350px;
+                        margin: 0 30px;
+                    }
+                    @include small-phone {
+                        width: 260px;
+                        margin: 0 20px;
+                    }
 
                     .hotels-cards__image {
                         background-image: url('../../assets/Room_card_one.jpg');
@@ -303,6 +338,12 @@ export default {
                         width: 100%;
                         height: 255px;
                         transition: 300ms ease-in-out;
+                        @include medium-phone {
+                            height: 230px;
+                        }
+                        @include small-phone {
+                            height: 170px;
+                        }
                     }
 
                     .hotels-cards__information {

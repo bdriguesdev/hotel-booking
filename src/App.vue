@@ -60,8 +60,13 @@ export default {
 
 <style lang="scss">
   @import './scss/variables.scss';
+  @import './scss/mixins.scss';
+
   html {
     font-size: 16px;
+    @include desktop {
+      font-size: 14px;
+    }
   }
 
   body {

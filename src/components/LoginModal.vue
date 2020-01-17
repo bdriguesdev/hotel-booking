@@ -112,6 +112,7 @@ export default {
 
 <style lang='scss'>
     @import '../scss/variables.scss';
+    @import '../scss/mixins.scss';
 
     .login__modal {
         top: 0;
@@ -274,6 +275,9 @@ export default {
                     top: 13px;
                     left: 43px;
                     color: $shadow-color;
+                    @include desktop {
+                        left: 46px;
+                    }
                 }
             }
         }
