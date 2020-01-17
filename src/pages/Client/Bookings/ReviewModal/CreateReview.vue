@@ -72,6 +72,7 @@ export default {
 
 <style lang='scss'>
     @import '../../../../scss/variables.scss';
+    @import '../../../../scss/mixins.scss';
 
     .review-create__form {
         padding-top: 28px;
@@ -122,10 +123,23 @@ export default {
                     border: none;
                     box-shadow: inset 0px 0px 10px rgba(0,0,0,0.05);
                     border-bottom: 2px solid $secondary-color-two;
+                    @include large-phone {
+                        width: 261px;
+                        max-width: 261px;
+                        min-width: 261px;
+                    }
+                    @include small-phone {
+                        width: 181px;
+                        max-width: 181px;
+                        min-width: 181px;
+                    }
                 }
 
                 .booking__reviews__rating {
                     width: 275px;
+                    @include small-phone {
+                        width: 195px;
+                    }
 
                     svg {
                         width: 29px;
@@ -199,6 +213,9 @@ export default {
             top: 13px;
             left: 23px;
             color: $shadow-color;
+            @include desktop {
+                left: 29px;
+            }
         }
     }
         

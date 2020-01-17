@@ -1,5 +1,5 @@
 <template>
-    <div class="calendar__container">
+    <div class="calendar__container__bookings">
         <div class="calendar__options">
             <div class="calendar__month">
                 <img src="../../../assets/Mini_arrow_left.svg" alt="Month left arrow" @click="handleChangeClick('month', month - 1)">
@@ -165,10 +165,14 @@ export default {
 
 <style lang='scss'>
     @import '../../../scss/variables.scss';
+    @import '../../../scss/mixins.scss';
 
-    .calendar__container {
+    .calendar__container__bookings {
         width: 275px;
         box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        @include small-phone() {
+            width: 232px;
+        }
 
         .calendar__options {
             padding: 0 9px;

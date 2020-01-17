@@ -157,6 +157,7 @@ export default {
 
 <style lang='scss'>
     @import '../../../scss/variables.scss';
+    @import '../../../scss/mixins.scss';
 
     .booking__filter__modal {
         top: 0;
@@ -173,6 +174,12 @@ export default {
             width: 670px;
             margin: 0 auto;
             margin-top: 10vh;
+            @include large-phone {
+                width: 350px;
+            }
+            @include small-phone {
+                width: 280px;
+            }
 
             .booking__filter__nav {
                 background-color: $secondary-color-two;
@@ -224,6 +231,9 @@ export default {
                     display: flex;
                     flex-wrap: wrap;
                     justify-content: space-between;
+                    @include large-phone {
+                        justify-content: center;
+                    }
                     
                     label {
                         font-family: $secondary-font;
@@ -235,6 +245,9 @@ export default {
                         display: flex;
                         flex-direction: column;
                         align-items: flex-start;
+                        @include small-phone {
+                            width: 232px;
+                        }
                         
                         input {
                             background-color: $input-bg-color;
@@ -248,6 +261,9 @@ export default {
                             color: $input-text-color;
                             box-shadow: inset 0px 0px 10px rgba(0,0,0,0.05);
                             border-radius: 0;
+                            @include small-phone {
+                                width: 220px;
+                            }
                         }
                         
                         .booking__input--range {
@@ -256,9 +272,15 @@ export default {
                             position: relative;
                             display: flex;
                             justify-content: space-between;
+                            @include small-phone {
+                                width: 232px;
+                            }
 
                             input {
                                 width: 110px;
+                                @include small-phone {
+                                    width: 80px;
+                                }
                             }
                         }
 
@@ -347,6 +369,9 @@ export default {
                     top: 13px;
                     left: 29px;
                     color: $shadow-color;
+                    @include desktop {
+                        left: 34px;
+                    }
                 }
             }
         }

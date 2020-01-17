@@ -105,6 +105,7 @@ export default {
 
 <style lang='scss'>
     @import '../../../scss/variables.scss';
+    @import '../../../scss/mixins.scss';
 
     .client__profile__modal {
         top: 0;
@@ -121,6 +122,12 @@ export default {
             width: 670px;
             margin: 0 auto;
             margin-top: 10vh;
+            @include large-phone {
+                width: 350px;
+            }
+            @include small-phone {
+                width: 280px;
+            }
 
             .client__profile__nav {
                 background-color: $secondary-color-two;
@@ -191,6 +198,9 @@ export default {
                             width: 250px;
                             height: 250px;
                             position: relative;
+                            @include small-phone {
+                                width: 200px;
+                            }
 
                             .client__avatar__btn {
                                 text-transform: none;
@@ -233,6 +243,9 @@ export default {
                                 top: 13px;
                                 left: 38px;
                                 color: $shadow-color;
+                                @include desktop {
+                                    left: 41px;
+                                }
                             }
                         }
                     }
@@ -303,6 +316,9 @@ export default {
                     top: 13px;
                     left: 28px;
                     color: $shadow-color;
+                    @include desktop {
+                        left: 30px;
+                    }
                 }
             }
         }
