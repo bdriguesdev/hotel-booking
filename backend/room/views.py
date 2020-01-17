@@ -1,0 +1,301 @@
+from django.shortcuts import render
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from django.db.models import Q
+from django.utils import timezone
+
+from .serializers import RoomSerializer, AmenitySerializer, RoomImageSerializer
+from backend.validators import textValidator, numValidator, intValidator
+from .models import Room, Amenity, RoomImage
+from backend.hotel.models import Hotel
+
+class CreateRoom(APIView):
+
+    #need photos for every room
+    #need to use a middleware to verify if the user is a business acount(maybe should have a limit of hotels that a business can create)
+    def post(self, request):
+        try:
+            if request.user_type != 'Business': #To be able to create a room the user need to be a Business acount
+                return Response('Acess denied.')
+            hotel = Hotel.objects.get(id=request.data['hotelId']) 
+            if request.authorized.id != hotel.business.id: #checking if the user requesting the creation of the room for a hotel actually have the hotel
+                return Response('Acess denied.')
+            name = textValidator(request.data['name'], 40, 5)
+            description = textValidator(request.data['description'], 450, 10)
+            price = numValidator(request.data['price'], 1000, 5) #need to verify if the price is at max 0.00(2 decimals)
+            
+            room = Room(name=name, description=description, price=price, created=timezone.now(), hotel=hotel, updated=timezone.now())
+            room.save()
+            serializer = RoomSerializer(room)
+
+            return Response(serializer.data)
+        except Exception as err:
+            print(err)
+            return Response(str(err))
+        
+
+class RemoveRoom(APIView):
+    
+    def delete(self, request):
+        #need to check if a user has booked this room
+        try:
+            if request.user_type != 'Business':
+                return Response('Acess denied.')
+            
+            room_id = intValidator(request.data['id'])
+            room = Room.objects.filter(id=id)
+            if room.hotel.business != request.authorized: #need to check here correctly
+                return Response('Acess denied.')
+            room.delete()
+
+            serializer = RoomSerializer(room)
+            return Response(serializer.data)
+        except Exception:
+            return Response('Send a valid data.')
+        
+class EditRoom(APIView):
+
+    def update(self, request):
+        #need to verify if the user has this room is from one of his hotels
+        #maybe do something if the query can't find the room?
+        #if this doesn't work I need to search how to do this
+        try:
+            if request.user_type != 'Business':
+                return Response('Acess denied')
+
+            room_id = intValidator(request.data['id'])
+            room = Room.objects.get(id=room_id)
+            if room.hotel.business != request.authorized: #need to check here correctly
+                return Response('Acess denied.')
+
+            if request.data['nameEdit']:
+                name = textValidator(request.data['name'], 40, 5)
+                room.name = name
+            if request.data['descriptionEdit']:
+                description = textValidator(request.data['description'], 200, 10)
+                room.description = description
+            if request.data['priceEdit']:
+                price = numValidator(request.data['price'], 5, 1000)
+                room.price = price
+            room.updated = timezone.now()
+            room.save()
+            
+            serializer = RoomSerializer(room)
+            return Response(serializer.data)
+        except Exception:
+            return Response('Send a valid data.')
+
+class getAllHotelRooms(APIView):
+
+    def post(self, request):
+        try:       
+            hotel_id = request.data['hotelId']
+            rooms = Room.objects.filter(hotel_id=hotel_id)
+
+            serializer = RoomSerializer(rooms, many=True)
+
+            return Response(serializer.data)
+        except Exception as err:
+            return Response(str(err))
+
+#only admins can create perks
+
+class AddMultipliesAmenitiesToRoom(APIView):
+
+    #check if the business has the hotel/room and the perk exist
+    def post(self, request):
+        try:
+            if request.user_type != 'Business':
+                return Response('Acess denied')
+            
+            room_id = intValidator(request.data['id'])
+            room = Room.objects.get(id=room_id)
+            if room.hotel.business != request.authorized: #need to check here correctly
+                return Response('Acess denied.')
+
+            if len(request.data['amenities']) <= 0:
+                raise Exception
+            
+            #here could have some problems if the room already have this perk, monkaHmm need to try that
+            for x in range(0, len(request.data['amenities'])):
+                if not(isinstance(request.data['amenities'][x], int)):
+                    raise Exception
+                amenity = Amenity.objects.get(id=request.data['amenities'][x])
+                room.amenities.add(amenity)
+
+            room.updated = timezone.now()
+            room.save()
+            serializer = RoomSerializer(room)
+
+            return Response(serializer.data)
+        except Exception:
+            return Response('Send a valid data.')
+
+class RemoveMultipliesAmenitiesFromRoom(APIView):
+
+    #check if the business has the hotel/room and the perk exist
+    def delete(self, request):
+        try:
+            if request.user_type != 'Business':
+                raise Exception
+
+            room_id = intValidator(request.data['id'])
+            room = Room.objects.get(id=room_id)
+            if room.hotel.business != request.authorized: #need to check here correctly
+                raise Exception
+
+            if len(request.data['amenities']) <= 0:
+                raise Exception
+
+            for x in range(0, len(request.data['amenities'])):
+                if not(isinstance(request.data['amenities'][x], int)):
+                    raise Exception
+                amenity = Amenity.objects.get(id=request.data['amenities'][x])
+                room.amenities.remove(amenity)
+            
+            room.updated = timezone.now()
+            room.save()
+            serializer = RoomSerializer(room)
+
+            return Response(serializer.data)
+        except Exception:
+            return Response('Send a valid data.')
+
+class RoomImageUploader(APIView):
+
+    def put(self, request):    
+        try:
+            room_id = request.data['roomId']
+            room_priority = request.data['priority']
+            room = Room.objects.get(id=room_id)
+            if room.hotel.business.id != request.authorized.id:
+                raise Exception("You don't have permission to modify rooms that aren't ours.")
+
+            room_image = RoomImage(photo=request.FILES['photo'], priority=room_priority, room=room)
+            room_image.save()
+            
+            serializer = RoomImageSerializer(room_image)
+
+            return Response(serializer.data)
+        except Exception as err:
+            return Response(str(err))
+
+class OneRoomDetails(APIView):
+
+    def post(self, request):
+        try:
+            room_id = request.data['roomId']
+            
+            room = Room.objects.get(id=room_id)
+            room.views += 1
+            room.save()
+
+            serializer = RoomSerializer(room)
+
+            return Response(serializer.data)
+        except Exception:
+            return Response('An error has been occurred.')
+
+class MostPopularRooms(APIView):
+
+    def get(self, request):
+        try:
+            rooms = Room.objects.order_by('-views')[0:4] #need to pick up the top "x" most viewed rooms(so need to orded by views)
+            serializer = RoomSerializer(rooms, many=True)
+
+            return Response(serializer.data)
+        except Exception as err:
+            print(err) 
+            return Response('An error has been occurred.')
+
+class MostRatedRooms(APIView):
+
+    def get(self, request):
+        try:
+            rooms = Room.objects.order_by('reviews_average')
+            serializer = RoomSerializer(rooms)
+
+            return Response(serializer.data)
+        except Exception:
+            return Response('An error has been occurred.') #STATUS 404?
+
+class PriceRangeRoomSearch(APIView):
+
+    def get(self, request):
+        try:
+            min_price = request.data['minPrice']#validate
+            max_price = request.data['maxPrice']#validate
+
+            rooms = Room.objects.filter(Q(price__gte=min_price) & Q(price__lte=max_price))
+
+            serializer = RoomSerializer(rooms)
+
+            return Response(serializer.data)
+        except Exception:
+            return Response('An error has been occurred.')
+
+class Test(APIView):
+
+    def get(self, request):
+        try:
+            rooms = Room.objects.filter(price__gte=100)
+            serializer = RoomSerializer(rooms, many=True)
+
+            return Response(serializer.data)
+        except Exception as err:
+            return Response(str(err))
+
+class MultipliesQueriesRoomSearch(APIView):
+
+    def post(self, request):
+        try:
+            room = Room.objects
+
+            if request.data['priceRange'] == 'True':
+                if request.data['minPrice'] != '-1':
+                    min_price = request.data['minPrice']#validate
+                    room = room.filter(price__gte=min_price)
+                if request.data['maxPrice'] != '-1':
+                    max_price = request.data['maxPrice']
+                    room = room.filter(price__lte=max_price)
+                # room = room.filter(Q(price__gte=min_price) & Q(price__lte=max_price))
+
+            if request.data['nameSearch'] == 'True':
+                name = textValidator(request.data['name'], 40, 2)
+
+                room = room.filter(name__contains=name)
+
+            #--------------------------------
+            #----TO SEARCH BY CITY, STATE AND HOTEL NAME I NEED THE HOTEL MODEL
+            #----ALSO I NEED TO BE MAKE ABLE TO SEARCH BY PERKS
+            #--------------------------------
+
+            if request.data['hotelIdSearch'] == 'True':
+                hotel_id = request.data['hotelId']
+                room = room.filter(hotel_id=hotel_id) #THIS COULD NOT WORK PROPERLY
+
+            if request.data['hotelNameSearch'] == 'True':
+                hotel_name = request.data['hotelName']
+                room = room.filter(hotel__name__contains=hotel_name)
+
+            if request.data['citySearch'] == 'True':
+                city = textValidator(request.data['city'], 40, 2)
+                room = room.filter(hotel__city__contains=city)
+                
+            if request.data['stateSearch'] == 'True':
+                state = textValidator(request.data['state'], 30, 2)
+                room = room.filter(hotel__state__contains=state)
+                    
+            # if request.data['reviewsSearch'] == 'True':
+            #     review_min = request.data['minReview']
+            #     review_max = request.data['maxReview']
+                
+            #     room = room.filter(Q(reviews_average__gte=review_min) & Q(reviews_average__lte=review_max))
+
+            serializer = RoomSerializer(room, many=True)
+
+            return Response(serializer.data)
+        except Exception as err:
+            print(err)
+            return Response('An error has been occurred.')
+
