@@ -12,27 +12,26 @@ from backend.hotel.models import Hotel
 
 class CreateRoom(APIView):
 
-    #need photos for every room
-    #need to use a middleware to verify if the user is a business acount(maybe should have a limit of hotels that a business can create)
     def post(self, request):
         try:
-            if request.user_type != 'Business': #To be able to create a room the user need to be a Business acount
+            if request.user_type != 'Business': 
                 return Response('Acess denied.')
             hotel = Hotel.objects.get(id=request.data['hotelId']) 
-            if request.authorized.id != hotel.business.id: #checking if the user requesting the creation of the room for a hotel actually have the hotel
+            if request.authorized.id != hotel.business.id:
                 return Response('Acess denied.')
             name = textValidator(request.data['name'], 40, 5)
             description = textValidator(request.data['description'], 450, 10)
-            price = numValidator(request.data['price'], 1000, 5) #need to verify if the price is at max 0.00(2 decimals)
+            price = numValidator(request.data['price'], 1000, 5)
             
             room = Room(name=name, description=description, price=price, created=timezone.now(), hotel=hotel, updated=timezone.now())
             room.save()
             serializer = RoomSerializer(room)
 
             return Response(serializer.data)
-        except Exception as err:
-            print(err)
-            return Response(str(err))
+        except CustomException as err:
+            return Response({ "error": str(err) })
+        except Exception:
+            return Response({ "error": 'An error has been occurred.' })
         
 
 class RemoveRoom(APIView):
@@ -96,8 +95,8 @@ class getAllHotelRooms(APIView):
             serializer = RoomSerializer(rooms, many=True)
 
             return Response(serializer.data)
-        except Exception as err:
-            return Response(str(err))
+        except Exception:
+            return Response({ "error": 'An error has been occurred.' })
 
 #only admins can create perks
 
@@ -170,7 +169,7 @@ class RoomImageUploader(APIView):
             room_priority = request.data['priority']
             room = Room.objects.get(id=room_id)
             if room.hotel.business.id != request.authorized.id:
-                raise Exception("You don't have permission to modify rooms that aren't ours.")
+                raise CustomException("You don't have permission to modify rooms that aren't ours.")
 
             room_image = RoomImage(photo=request.FILES['photo'], priority=room_priority, room=room)
             room_image.save()
@@ -178,8 +177,10 @@ class RoomImageUploader(APIView):
             serializer = RoomImageSerializer(room_image)
 
             return Response(serializer.data)
-        except Exception as err:
-            return Response(str(err))
+        except CustomException as err:
+            return Response({ "error": str(err) })
+        except Exception:
+            return Response({ "error": 'An error  has been occurred.' })
 
 class OneRoomDetails(APIView):
 
@@ -195,19 +196,18 @@ class OneRoomDetails(APIView):
 
             return Response(serializer.data)
         except Exception:
-            return Response('An error has been occurred.')
+            return Response({ "error": 'An error has been occurred.' })
 
 class MostPopularRooms(APIView):
 
     def get(self, request):
         try:
-            rooms = Room.objects.order_by('-views')[0:4] #need to pick up the top "x" most viewed rooms(so need to orded by views)
+            rooms = Room.objects.order_by('-views')[0:4]
             serializer = RoomSerializer(rooms, many=True)
 
             return Response(serializer.data)
-        except Exception as err:
-            print(err) 
-            return Response('An error has been occurred.')
+        except Exception:
+            return Response({ "error": 'An error has been occurred.' })
 
 class MostRatedRooms(APIView):
 
