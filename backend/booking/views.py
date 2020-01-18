@@ -5,6 +5,7 @@ from django.utils import timezone
 from django.db.models import Q
 from datetime import datetime
 
+from backend.exceptions import CustomException
 from .models import Booking, Review, DiscountCoupon, RoomPromotion
 from backend.hotel.models import Hotel
 from backend.room.models import Room
@@ -13,30 +14,25 @@ from backend.validators import textValidator, numValidator, reviewValueValidator
 
 class CreateBooking(APIView):
 
-    #here I need to do a payment and confirm if it has been sucessful
-    #need to check if the room has empty for the days that the client need
     def post(self, request):
         try:
             if request.user_type != 'Client':
-                raise Exception
+                raise CustomException("You don't have permission to create a booking.")
 
             room_id = request.data['roomId']
             room = Room.objects.get(id=room_id)
-            #----NEED TO CHECK IF THE ROOM ISNT EMPTY----#
-            #----NEED TO CHECK IF THE ROOM WAS BOOKED ALREADY----#
             date_now = datetime.now()
             start_at = datetime.strptime(request.data['startAt'], "%a, %d %b %Y %H:%M:%S %Z")
             end_at = datetime.strptime(request.data['endAt'], "%a, %d %b %Y %H:%M:%S %Z")
             coupon_name = request.data['coupon']
             if start_at < date_now:
-                print('here')
-                raise Exception
+                raise CustomException("The start date is in the past.")
             if start_at > end_at:
-                raise Exception
+                raise CustomException("Start date needs to be early than the end date.")
 
             bookings = Booking.objects.filter(start__gte=start_at, room_id=room_id)
             if len(bookings) != 0:
-                raise Exception
+                raise CustomException("There's already an appointment at this date.")
 
             nights = (end_at - start_at).days
             total_price = nights * room.price
@@ -49,10 +45,10 @@ class CreateBooking(APIView):
             serializer = BookingSerializer(booking)
 
             return Response(serializer.data)
-        except Exception as err:
-            print(err)
-            return Response('An error has been occurred.')
-        #the hotel owner can create a booking of his own hotel to create a day off or should I create a different table for that?
+        except CustomException as err:
+            return Response({ "error": str(err) })
+        except Exception:
+            return Response({ "error": 'An error has been occurred.' })
 
 class CancelBooking(APIView):
 
@@ -75,9 +71,8 @@ class getBookingsPerMonth(APIView):
             serializer = BookingCalendarSerializer(bookings, many=True)
 
             return Response(serializer.data)
-        except Exception as err:
-            print(err)
-            return Response('An error has been occurred.')
+        except Exception:
+            return Response({ "error": 'An error has been occurred.' })
 
 class getBookingsPerMonthWithDetails(APIView):
     
@@ -100,9 +95,8 @@ class getBookingsPerMonthWithDetails(APIView):
             serializer = BookingSerializer(bookings, many=True)
 
             return Response(serializer.data)
-        except Exception as err:
-            print(err)
-            return Response('An error has been occurred.')
+        except Exception:
+            return Response( { "error": 'An error has been occurred.' })
 
 class getHotelBookingsPerMonth(APIView):
     
@@ -116,7 +110,7 @@ class getHotelBookingsPerMonth(APIView):
             year = request.data['year']
             hotel = Hotel.objects.get(id=hotel_id)
             if hotel.business.id != request.authorized.id:
-                raise Exception("You don't have permission to acess this.")
+                raise Exception
 
             bookings = Booking.objects.filter(room__hotel=hotel)
             bookings = bookings.filter(Q(start__year=year) | Q(end__year=year))
@@ -125,9 +119,8 @@ class getHotelBookingsPerMonth(APIView):
             serializer = BookingCalendarSerializer(bookings, many=True)
 
             return Response(serializer.data)
-        except Exception as err:
-            print(err)
-            return Response('An error has been occurred.')
+        except Exception:
+            return Response({ "error": 'An error has been occurred.' })
 
 class getUserBookings(APIView):
 
@@ -171,19 +164,15 @@ class getUserBookings(APIView):
             serializer = BookingSerializer(bookings, many=True)
 
             return Response(serializer.data)
-       except Exception as err:
-           print(err)
-           return Response('An error has been occurred.')
+       except Exception:
+           return Response({ "error": 'An error has been occurred.' })
 
 
 class CreateReview(APIView):
-    #IMPORTANT:-----------------------------
-    #need to check if the user has a finished booking in this room I also need the client id
-    #---------------------------------------
     def post(self, request):
         try:
             if request.user_type != 'Client':
-                raise Exception
+                raise CustomException("You don't have permission.")
 
             room_id = request.data['roomId']
             booking_id = request.data['bookingId']
@@ -195,12 +184,10 @@ class CreateReview(APIView):
             booking = Booking.objects.get(id=booking_id)
             reviews = Review.objects.filter(booking__id=booking_id)
             if len(reviews) != 0:
-                raise Exception
+                raise CustomException("You already have a review created for this booking.")
             #problem here
             if booking.start > timezone.now():
-                raise Exception
-
-            
+                raise CustomException("Your booking didn't started yet.")
 
             #saving review information at the hotel that the room is from
             hotel.reviews_count += 1
@@ -223,8 +210,10 @@ class CreateReview(APIView):
             serializer = ReviewSerializer(review)
 
             return Response(serializer.data)
+        except CustomException as err:
+            return Response({ "error": str(err) })
         except Exception:
-            return Response('Send a valid data.')
+            return Response({ "error": 'Send a valid data.' })
 
 class getRoomReviews(APIView):
 
@@ -237,7 +226,7 @@ class getRoomReviews(APIView):
 
             return Response(serializer.data)
         except Exception:
-            return Response('An error has been occurred.')
+            return Response({ "error": 'An error has been occurred.' })
 
 class getReviewsAllRoomsFromHotel(APIView):
 
@@ -249,9 +238,8 @@ class getReviewsAllRoomsFromHotel(APIView):
             serializer = ReviewRoomSerializer(reviews, many=True)
 
             return Response(serializer.data)
-        except Exception as err:
-            print(err)
-            return Response('An error has been occurred.')
+        except Exception:
+            return Response({ "error": 'An error has been occurred.' })
 class CreatePromotion(APIView):
 
     def post(self, request):

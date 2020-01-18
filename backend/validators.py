@@ -1,31 +1,30 @@
 from backend.exceptions import CustomException
 
 def textValidator(text, maxLen, minLen = 1):
-    #returns text that only contains 0-9 / a-z / A-Z or raise a Exception
 
     if not(isinstance(text, str)):
-        raise Exception('Send a valid text. -1')
+        raise CustomException('Send a valid text.')
     if len(text) > maxLen or len(text) < minLen:
-        raise Exception('Send a valid text. -2')
+        raise CustomException('Send a valid text.')
     for x in range(0, len(text)):
         asciinum = ord(text[x])
         #33(!) #44(,) #46(.) #63(?) #32(space) #48-57(0-9) #65-90(A-Z) 97-122(a-z)
         if asciinum < 32:
-            raise Exception('Send a valid text. 1')
+            raise CustomException('Send a valid text.')
         elif asciinum > 33 and asciinum < 44:
-            raise Exception('Send a valid text. 2')
+            raise CustomException('Send a valid text.')
         elif asciinum > 44 and asciinum < 46:
-            raise Exception('Send a valid text. 3')
+            raise CustomException('Send a valid text.')
         elif asciinum > 46 and asciinum < 48:
-            raise Exception('Send a valid text. 4')
+            raise CustomException('Send a valid text.')
         elif asciinum > 57 and asciinum < 63:
-            raise Exception('Send a valid text. 5')
+            raise CustomException('Send a valid text.')
         elif asciinum > 63 and asciinum < 65:
-            raise Exception('Send a valid text. 6')
+            raise CustomException('Send a valid text.')
         elif asciinum > 90 and asciinum < 97:
-            raise Exception('Send a valid text. 7')
+            raise CustomException('Send a valid text.')
         elif asciinum > 122:
-            raise Exception('Send a valid text. 8')
+            raise CustomException('Send a valid text.') 
     
     return text
 

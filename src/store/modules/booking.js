@@ -53,7 +53,7 @@ const actions = {
     changeBookingEnd({ commit }, date) {
         commit('SET_BOOKING_END', date);
     },
-    createBooking({ commit }, { roomId, coupon }) {
+    createBooking({ commit, dispatch }, { roomId, coupon }) {
         let requestBody = {
             roomId,
             startAt: store.getters.bookingStart.toUTCString(),
@@ -72,13 +72,14 @@ const actions = {
         }).then(data => {
             return data.json();
         }).then(data => {
-            //eslint-disable-next-line
-            console.log(data);
-            commit('SET_BOOKING', data);
+            if(data.error) {
+                dispatch('changeError', data.error);
+            } else {
+                commit('SET_BOOKING', data);
+            }
             commit('SET_BOOKING_LOADING', false);
-        }).catch(err => {
-            //eslint-disable-next-line
-            console.log(err);
+        }).catch(() => {
+            dispatch('changeError', 'An error has been occurred.')
         });
     },
     getBookings({ commit }, { startAt, endAt, city, state, minPrice, maxPrice }) {
@@ -108,14 +109,17 @@ const actions = {
         }).then(data => {
             return data.json();
         }).then(data => {
-            commit('SET_BOOKINGS', data);
+            if(data.error) {
+                commit('SET_BOOKINGS', null);
+            } else {
+                commit('SET_BOOKINGS', data);
+            }
             commit('SET_BOOKING_LOADING', false);
-        }).catch(err => {
-            //eslint-disable-next-line
-            console.log(err);
+        }).catch(() => {
+            commit('SET_BOOKINGS', null);
         })
     },
-    createReview(a, { description, value }) {
+    createReview({ dispatch }, { description, value }) {
         let requestBody = {
             value,
             description,
@@ -134,12 +138,12 @@ const actions = {
         }).then(data => {
             return data.json();
         }).then(data => {
-            //eslint-disable-next-line
-            console.log(data);
+            if(data.error) {
+                dispatch('changeError', data.error);
+            }
             // commit('SET_BOOKING', data);
-        }).catch(err => {
-            //eslint-disable-next-line
-            console.log(err);
+        }).catch(() => {
+            dispatch('changeError', 'An error has been occurred.');
         })
     },
     getRoomReviews({ commit }) {
@@ -156,11 +160,14 @@ const actions = {
         }).then(data => {
             return data.json();
         }).then(data => {
-            commit('SET_REVIEWS', data);
+            if(data.error) {
+                commit('SET_REVIEWS', null);
+            } else {
+                commit('SET_REVIEWS', data);
+            }
             commit('SET_BOOKING_LOADING', false);
-        }).catch(err => {
-            //eslint-disable-next-line
-            console.log(err);
+        }).catch(() => {
+            commit('SET_REVIEWS', null);
         })
     },
     getReviewsAllRoomsFromHotel({ commit }) {
@@ -177,11 +184,14 @@ const actions = {
         }).then(data => {
             return data.json();
         }).then(data => {
-            commit('SET_REVIEWS', data);
+            if(data.error) {
+                commit('SET_REVIEWS', null);
+            } else {
+                commit('SET_REVIEWS', data);
+            }
             commit('SET_BOOKING_LOADING', false);
-        }).catch(err => {   
-            //eslint-disable-next-line
-            console.log(err);
+        }).catch(() => {   
+            commit('SET_REVIEWS', null);
         })
     },
     getRoomBookingsPerMonth({ commit }, { roomId, bookingsYear, bookingsMonth }) {
@@ -200,10 +210,13 @@ const actions = {
         }).then(data => {
             return data.json();
         }).then(data => {
-            commit('SET_BOOKINGS', data);
-        }).catch(err => {
-            //eslint-disable-next-line
-            console.log(err);
+            if(data.error) {
+                commit('SET_BOOKINGS', null);
+            } else {
+                commit('SET_BOOKINGS', data);
+            }
+        }).catch(() => {
+            commit('SET_BOOKINGS', null);
         })
     },
     getHotelBookings({ commit }, { hotelId, month, year }) {
@@ -224,10 +237,13 @@ const actions = {
         }).then(data => {
             return data.json();
         }).then(data => {
-            commit('SET_BOOKINGS', data);
-        }).catch(err => {
-            //eslint-disable-next-line
-            console.log(err);
+            if(data.error) {
+                commit('SET_BOOKINGS', null);
+            } else {
+                commit('SET_BOOKINGS', data);
+            }
+        }).catch(() => {
+            commit('SET_BOOKINGS', null);
         })
     },
     getRoomBookingsWithDetails({ commit }, { roomId, month, year }) {
@@ -248,10 +264,13 @@ const actions = {
         }).then(data => {
             return data.json()
         }).then(data => {
-            commit('SET_BOOKINGS', data);
-        }).catch(err => {
-            //eslint-disable-next-line
-            console.log(err);
+            if(data.error) {
+                commit('SET_BOOKINGS', null);
+            } else {
+                commit('SET_BOOKINGS', data);
+            }
+        }).catch(() => {
+            commit('SET_BOOKINGS', null);
         })
     }
 };
