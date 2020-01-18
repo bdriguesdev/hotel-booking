@@ -55,13 +55,22 @@ const actions = {
         }).then(data => {
             return data.json();
         }).then(data => {
-            commit('SET_ROOM_SEARCH', data);
-            commit('SET_SEARCH_TYPE', 'room');
-            commit('SET_SEARCH_LOADING', false);
-            commit('SEARCH_AMOUNT', data.length);
-        }).catch(err => {
-            //eslint-disable-next-line
-            console.log(err);
+            if(data.error) {
+                commit('SET_ROOM_SEARCH', null);
+                commit('SET_SEARCH_TYPE', null);
+                commit('SET_SEARCH_LOADING', null);
+                commit('SEARCH_AMOUNT', null); 
+            } else {
+                commit('SET_ROOM_SEARCH', data);
+                commit('SET_SEARCH_TYPE', 'room');
+                commit('SET_SEARCH_LOADING', false);
+                commit('SEARCH_AMOUNT', data.length);
+            }
+        }).catch(() => {
+            commit('SET_ROOM_SEARCH', null);
+            commit('SET_SEARCH_TYPE', null);
+            commit('SET_SEARCH_LOADING', null);
+            commit('SEARCH_AMOUNT', null); 
         });
     },
     searchHotels({ commit }, { name, city, state }) {
@@ -84,15 +93,22 @@ const actions = {
         }).then(data => {
             return data.json();
         }).then(data => {
-            //eslint-disable-next-line
-            console.log(data);
-            commit('SET_HOTEL_SEARCH', data);
-            commit('SET_SEARCH_TYPE', 'hotel');
-            commit('SET_SEARCH_LOADING', false);
-            commit('SEARCH_AMOUNT', data.length);
-        }).catch(err => {
-            //eslint-disable-next-line
-            console.log(err);
+            if(data.error) {
+                commit('SET_HOTEL_SEARCH', null);
+                commit('SET_SEARCH_TYPE', null);
+                commit('SET_SEARCH_LOADING', null);
+                commit('SEARCH_AMOUNT', null);
+            } else {
+                commit('SET_HOTEL_SEARCH', data);
+                commit('SET_SEARCH_TYPE', 'hotel');
+                commit('SET_SEARCH_LOADING', false);
+                commit('SEARCH_AMOUNT', data.length);
+            }
+        }).catch(() => {
+            commit('SET_HOTEL_SEARCH', null);
+            commit('SET_SEARCH_TYPE', null);
+            commit('SET_SEARCH_LOADING', null);
+            commit('SEARCH_AMOUNT', null);
         });
     }
 };

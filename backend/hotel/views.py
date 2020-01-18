@@ -5,6 +5,7 @@ from rest_framework.parsers import MultiPartParser, FormParser
 from django.db.models import Q
 from django.utils import timezone
 
+from backend.exceptions import CustomException
 from .serializers import HotelSerializer, HotelWithRoomsDetailsSerializer, HotelImageSerializer
 from ..validators import textValidator, stateValidator, cityValidator, intValidator
 from .models import Hotel, HotelImage
@@ -165,5 +166,7 @@ class MultipliesQueriesHotelSearch(APIView):
             serializer = HotelSerializer(hotels, many=True)
 
             return Response(serializer.data)
-        except Exception as err:
-            return Response(str(err))
+        except CustomException as err:
+            return Response({ "error": str(err) })
+        except Exception:
+            return Response({ "error": 'An error has been occurred.' })

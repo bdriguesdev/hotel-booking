@@ -4,6 +4,7 @@ from rest_framework.response import Response
 from django.db.models import Q
 from django.utils import timezone
 
+from backend.exceptions import CustomException
 from .serializers import RoomSerializer, AmenitySerializer, RoomImageSerializer
 from backend.validators import textValidator, numValidator, intValidator
 from .models import Room, Amenity, RoomImage
@@ -116,7 +117,7 @@ class AddMultipliesAmenitiesToRoom(APIView):
             if len(request.data['amenities']) <= 0:
                 raise Exception
             
-            #here could have some problems if the room already have this perk, monkaHmm need to try that
+            #here could have some problems if the room already have this perk, monkaHmm
             for x in range(0, len(request.data['amenities'])):
                 if not(isinstance(request.data['amenities'][x], int)):
                     raise Exception
@@ -253,26 +254,20 @@ class MultipliesQueriesRoomSearch(APIView):
 
             if request.data['priceRange'] == 'True':
                 if request.data['minPrice'] != '-1':
-                    min_price = request.data['minPrice']#validate
+                    min_price = request.data['minPrice']
                     room = room.filter(price__gte=min_price)
                 if request.data['maxPrice'] != '-1':
                     max_price = request.data['maxPrice']
                     room = room.filter(price__lte=max_price)
-                # room = room.filter(Q(price__gte=min_price) & Q(price__lte=max_price))
 
             if request.data['nameSearch'] == 'True':
                 name = textValidator(request.data['name'], 40, 2)
 
                 room = room.filter(name__contains=name)
 
-            #--------------------------------
-            #----TO SEARCH BY CITY, STATE AND HOTEL NAME I NEED THE HOTEL MODEL
-            #----ALSO I NEED TO BE MAKE ABLE TO SEARCH BY PERKS
-            #--------------------------------
-
             if request.data['hotelIdSearch'] == 'True':
                 hotel_id = request.data['hotelId']
-                room = room.filter(hotel_id=hotel_id) #THIS COULD NOT WORK PROPERLY
+                room = room.filter(hotel_id=hotel_id)
 
             if request.data['hotelNameSearch'] == 'True':
                 hotel_name = request.data['hotelName']
@@ -295,7 +290,8 @@ class MultipliesQueriesRoomSearch(APIView):
             serializer = RoomSerializer(room, many=True)
 
             return Response(serializer.data)
-        except Exception as err:
-            print(err)
-            return Response('An error has been occurred.')
+        except CustomException as err:
+            return Response({ "error": str(err) })
+        except Exception:
+            return Response({ "error": 'An error has been occurred.' })
 
