@@ -52,14 +52,17 @@ const actions = {
         }).then(data => {
             return data.json();
         }).then(data => {
-            commit('SET_ROOM', data.hotel);
-            dispatch('getAllUserHotels');
-        }).catch(err => {
-            // eslint-disable-next-line
-            console.log(err);
+            if(data.error) {
+                dispatch('changeError', data.error);
+            } else {
+                commit('SET_ROOM', data.hotel);
+                dispatch('getAllUserHotels');
+            }
+        }).catch(() => {
+            dispatch('changeError', 'An error has been occured.');
         });
     },
-    changeHotelPhoto({ getters }, { photo }) {
+    changeHotelPhoto({ getters, dispatch }, { photo }) {
         const formData = new FormData();
         formData.append('photo', photo);
         formData.append('hotelId', getters.hotel.id);
@@ -74,11 +77,13 @@ const actions = {
             body: formData
         }).then(data => {
             return data.json();
-        }).then(() => {
+        }).then(data => {
+            if(data.error) {
+                dispatch('changeError', data.error);
+            }
             return;
-        }).catch(err => {
-            //eslint-disable-next-line
-            console.log(err);
+        }).catch(() => {
+            dispatch('changeError', 'An error has been occurred.');
         });
     },
     editHotel({ commit }) {
@@ -127,11 +132,14 @@ const actions = {
         }).then(data => {
             return data.json();
         }).then(data => {
-            commit('SET_HOTELS', data);
+            if(data.error) {
+                commit('SET_HOTELS', null);
+            } else {
+                commit('SET_HOTELS', data);
+            }
             commit('SET_HOTEL_LOADING', false);
-        }).catch(err => {
-            // eslint-disable-next-line
-            console.log(err);
+        }).catch(() => {
+            commit('SET_HOTELS', null);
         });
     },
     getHotel({ commit, dispatch }, { hotelId }) {
@@ -147,12 +155,15 @@ const actions = {
         }).then(data => {
             return data.json();
         }).then(data => {
-            commit('SET_HOTEL', data);
+            if(data.error) {
+                commit('SET_HOTEL', null);
+            } else {
+                commit('SET_HOTEL', data);
+                dispatch('getReviewsAllRoomsFromHotel');
+            }
             commit('SET_HOTEL_LOADING', false);
-            dispatch('getReviewsAllRoomsFromHotel');
-        }).catch(err => {
-            // eslint-disable-next-line
-            console.log(err);
+        }).catch(() => {
+            commit('SET_HOTEL', null);
         });
     },
     getAllUserHotels({ commit }) {
@@ -167,10 +178,13 @@ const actions = {
         }).then(data => {
             return data.json();
         }).then(data => {
-            commit('SET_HOTELS', data);
-        }).catch(err => {
-            // eslint-disable-next-line
-            console.log(err);
+            if(data.error) {
+                commit('SET_HOTELS', null);
+            } else {
+                commit('SET_HOTELS', data);
+            }
+        }).catch(() => {
+            commit('SET_HOTELS', null);
         });
     },
     setHotelId({ commit }, { id }) {
@@ -197,10 +211,13 @@ const actions = {
         }).then(data => {
             return data.json();
         }).then(data => {
-            commit('SET_HOTELS', data);
-        }).catch(err => {
-            //eslint-disable-next-line
-            console.log(err);
+            if(data.error) {
+                commit('SET_HOTELS', null);
+            } else {
+                commit('SET_HOTELS', data);
+            }
+        }).catch(() => {
+            commit('SET_HOTELS', null);
         });
     }
 };

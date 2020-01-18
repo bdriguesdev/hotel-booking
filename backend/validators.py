@@ -110,22 +110,22 @@ def cityValidator(city):
 def numValidator(num, max=1000, min=0):
     num = float(num)
     if not(isinstance(num, float)) and not(isinstance(num, int)):
-        raise Exception('Send a valid number.')
+        raise CustomException('Send a valid number.')
     if num > max or num < min:
-        raise Exception('Send a valid number.')
+        raise CustomException('Send a valid number.')
 
     return num
 
 def intValidator(num):
     if not(isinstance(num, int)):
-        raise Exception
+        raise CustomException('Send a valid number.')
     return num
 
 def reviewValueValidator(num):
 
     if not(isinstance(num, float)) and not(isinstance(num, int)):
-        raise Exception('Send a valid number.')
+        raise CustomException('Send a valid number.')
     if num != 1 and num != 1.5 and num != 2 and num != 2.5 and num != 3 and num != 3.5 and num != 4 and num != 4.5 and num != 5:
-        raise Exception('Send a valid number.')
+        raise CustomException('Send a valid number.')
 
     return num

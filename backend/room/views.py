@@ -37,14 +37,13 @@ class CreateRoom(APIView):
 class RemoveRoom(APIView):
     
     def delete(self, request):
-        #need to check if a user has booked this room
         try:
             if request.user_type != 'Business':
                 return Response('Acess denied.')
             
             room_id = intValidator(request.data['id'])
             room = Room.objects.filter(id=id)
-            if room.hotel.business != request.authorized: #need to check here correctly
+            if room.hotel.business != request.authorized:
                 return Response('Acess denied.')
             room.delete()
 
@@ -56,16 +55,13 @@ class RemoveRoom(APIView):
 class EditRoom(APIView):
 
     def update(self, request):
-        #need to verify if the user has this room is from one of his hotels
-        #maybe do something if the query can't find the room?
-        #if this doesn't work I need to search how to do this
         try:
             if request.user_type != 'Business':
                 return Response('Acess denied')
 
             room_id = intValidator(request.data['id'])
             room = Room.objects.get(id=room_id)
-            if room.hotel.business != request.authorized: #need to check here correctly
+            if room.hotel.business != request.authorized: 
                 return Response('Acess denied.')
 
             if request.data['nameEdit']:
@@ -98,11 +94,8 @@ class getAllHotelRooms(APIView):
         except Exception:
             return Response({ "error": 'An error has been occurred.' })
 
-#only admins can create perks
-
 class AddMultipliesAmenitiesToRoom(APIView):
 
-    #check if the business has the hotel/room and the perk exist
     def post(self, request):
         try:
             if request.user_type != 'Business':
@@ -110,13 +103,12 @@ class AddMultipliesAmenitiesToRoom(APIView):
             
             room_id = intValidator(request.data['id'])
             room = Room.objects.get(id=room_id)
-            if room.hotel.business != request.authorized: #need to check here correctly
+            if room.hotel.business != request.authorized: 
                 return Response('Acess denied.')
 
             if len(request.data['amenities']) <= 0:
                 raise Exception
             
-            #here could have some problems if the room already have this perk, monkaHmm
             for x in range(0, len(request.data['amenities'])):
                 if not(isinstance(request.data['amenities'][x], int)):
                     raise Exception
@@ -133,7 +125,6 @@ class AddMultipliesAmenitiesToRoom(APIView):
 
 class RemoveMultipliesAmenitiesFromRoom(APIView):
 
-    #check if the business has the hotel/room and the perk exist
     def delete(self, request):
         try:
             if request.user_type != 'Business':
@@ -141,7 +132,7 @@ class RemoveMultipliesAmenitiesFromRoom(APIView):
 
             room_id = intValidator(request.data['id'])
             room = Room.objects.get(id=room_id)
-            if room.hotel.business != request.authorized: #need to check here correctly
+            if room.hotel.business != request.authorized:
                 raise Exception
 
             if len(request.data['amenities']) <= 0:

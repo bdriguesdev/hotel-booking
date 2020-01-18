@@ -15,18 +15,17 @@ class CreateHotel(APIView):
     def post(self, request):
         try:
             if request.authorized == False:
-                return Response('Acess denied.')
+                raise CustomException('Acess denied.')
             if request.user_type != 'Business':
-                return Response('Acess denied.')
+                raise CustomException('Acess denied.')
 
             name = textValidator(request.data['hotelName'], 30, 3)
             description = textValidator(request.data['description'], 450, 10)
-            city = cityValidator(request.data['city']) #need to validate
+            city = cityValidator(request.data['city'])
             state = stateValidator(request.data['state'])
-            # neighborhood = request.data['neighborhood'] #need to validate
-            complement = request.data['complement'] #need to validate
+            complement = request.data['complement'] 
             business = request.authorized
-            number = intValidator(int(request.data['number'])) #need to create a better validation, if the number is 0 means this doesn't have number. This also can be letters....
+            number = intValidator(int(request.data['number']))
 
             hotel = Hotel(name=name, description=description, city=city, state=state, complement=complement, business=business, number=number, created=timezone.now(), updated=timezone.now())
             hotel.save()
@@ -34,8 +33,10 @@ class CreateHotel(APIView):
             serializer = HotelSerializer(hotel)
 
             return Response(serializer.data)
+        except CustomException as err:
+            return Response({ "error": str(err) })
         except Exception:
-            return Response('Send a valid data.')
+            return Response({ "error": 'An error has been occured.' })
 
 class DeleteHotel(APIView):
 
@@ -47,11 +48,9 @@ class DeleteHotel(APIView):
             hotel_id = intValidator(request.data['id'])
             hotel = Hotel.objects.filter(id=hotel_id)
 
-            if hotel.business != request.authorized: #this will work?
+            if hotel.business != request.authorized: 
                 return Response('Acess denied.')
             hotel.delete()
-            #when booking-app is created do I need to cancel this action if the hotel was a booking occuring? Or even a booking scheduled?
-            #the best idea here is to return a message informing that the business need to be in contact to the support to be able to delete the hotel in this circumstances
 
             return Response(hotel)
         except Exception:
@@ -63,11 +62,9 @@ class HotelImageUploader(APIView):
         try:
             hotel_id = request.data['hotelId']
             priority = request.data['priority']
-            print(request.data['hotelId'])
             hotel = Hotel.objects.get(id=hotel_id)
-            print('here2')
             if hotel.business.id != request.authorized.id:
-                raise Exception("You don't have permission to modify hotels that aren't ours.")
+                raise CustomException("You don't have permission to modify this.")
 
             hotel_image = HotelImage(photo=request.FILES['photo'], priority=priority, hotel=hotel)
             hotel_image.save()
@@ -75,9 +72,10 @@ class HotelImageUploader(APIView):
             serializer = HotelImageSerializer(hotel_image)
 
             return Response(serializer.data)
-        except Exception as err:
-            print(err)
-            return Response(str(err))
+        except CustomException as err:
+            return Response({ "error": str(err) })
+        except Exception:
+            return Response({ "error": 'An error has been occured.' })
 
 class getHotelImages(APIView):
 
@@ -97,17 +95,17 @@ class AllUserHotels(APIView):
     def get(self, request):
         try:
             if request.authorized == False or request.user_type != "Business":
-                raise Exception("You don't have permission.")
+                raise CustomException("You don't have permission.")
 
-            # hotels = Hotel.objects.filter(business_id=request.authorized.id)
-            hotels = Hotel.objects.all()
+            hotels = Hotel.objects.filter(business__id=request.authorized.id)
+            # hotels = Hotel.objects.all()
             serializer = HotelSerializer(hotels, many=True)
 
             return Response(serializer.data)
+        except CustomException as err:
+            return Response({ "error": str(err) })
         except Exception as err:
-            return Response(str(err))
-
-#update Hotel ?
+            return Response({ "error": 'An error has been occurred.' })
 
 class OneHotelDetails(APIView):
 
@@ -121,7 +119,7 @@ class OneHotelDetails(APIView):
 
             return Response(serializer.data)
         except Exception:
-            return Response('An error has been occurred.')
+            return Response({ "error": 'An error has been occurred.' })
 
 class MostPopularHotels(APIView):
 
@@ -131,9 +129,8 @@ class MostPopularHotels(APIView):
             serializer = HotelSerializer(hotels, many=True)
             
             return Response(serializer.data)
-        except Exception as err:
-            print(err)
-            return Response('Send a valid data.')
+        except Exception:
+            return Response({ "error": 'An error has been occurred.' })
 
 class MultipliesQueriesHotelSearch(APIView):
 
