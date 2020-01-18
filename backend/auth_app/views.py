@@ -70,9 +70,8 @@ class CreateBusiness(APIView):
             email = emailValidator(request.data['email'])
             password = passwordValidator(request.data['password'])
             cnpj = 1234567
-            # cnpj = request.data['cnpj'] #need to validate here
-            city = cityValidator(request.data['city']) #need to validate here
-            state = stateValidator(request.data['state']) #need to validate here
+            city = cityValidator(request.data['city'])
+            state = stateValidator(request.data['state'])
 
             hashedPassword =  make_password(password)
 
@@ -82,8 +81,10 @@ class CreateBusiness(APIView):
             serializer = BusinessSerializer(business)
 
             return Response(serializer.data)
+        except CustomException as err:
+            return Response({ "error": str(err) })
         except Exception:
-            return Response('Send a valid data')
+            return Response({ "error": 'An error has been occurred.' })
         
 class UserAvatarUploader(APIView):
 
@@ -91,7 +92,7 @@ class UserAvatarUploader(APIView):
         try:
             user = request.authorized
             if user == False:
-                raise Exception
+                raise CustomException("You don't have permission.")
             
             user.photo = photo=request.FILES['photo']
             user.save()
@@ -103,6 +104,7 @@ class UserAvatarUploader(APIView):
                 serializer = BusinessSerializer(user)
 
             return Response(serializer.data)
-        except Exception as err:
-            print(err)
-            return Response('An error has been occurred.')
+        except CustomException as err:
+            return Response({ "error": str(err) })
+        except Exception:
+            return Response({ "error": 'An error has been occurred.' })

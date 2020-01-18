@@ -71,8 +71,6 @@ const actions = {
             return data.json();
         }).then(data => {
             if (data.error) {
-                //eslint-disable-next-line
-                console.log(data.error);
                 dispatch('changeError', data.error);
             } else {
                 commit('SET_TOKEN', data.token);
@@ -101,17 +99,18 @@ const actions = {
         }).then(data => {
             return data.json();
         }).then(data => {
-            commit('SET_TOKEN', data.token);
-            commit('SET_USER', data.user);
-            if(data.name) {
+            if(data.error) {
+                dispatch('changeError', data.error);
+            } else {
+                commit('SET_TOKEN', data.token);
+                commit('SET_USER', data.user);
                 dispatch('login', { userEmail: email, userPassword: password, userType: 'Business' });
             }
-        }).catch(err => {
-            // eslint-disable-next-line
-            console.log(err);
+        }).catch(() => {
+            dispatch('changeError', 'An error has been occurred.');
         });
     },
-    changeProfilePhoto({ commit, getters }, { photo }) {
+    changeProfilePhoto({ commit, getters, dispatch }, { photo }) {
         const formData = new FormData();
         formData.append('photo', photo);
 
@@ -125,10 +124,13 @@ const actions = {
         }).then(data => {
             return data.json();
         }).then(data => {
-            commit('SET_USER', data)
-        }).catch(err => {
-            //eslint-disable-next-line
-            console.log(err);
+            if(data.error) {
+                dispatch('changeError', data.error);
+            } else {
+                commit('SET_USER', data);
+            }
+        }).catch(() => {
+            dispatch('changeError', 'An error has been occurred.');
         });
     }
 };
