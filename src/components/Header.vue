@@ -4,7 +4,7 @@
             <img src="../assets/Logo_Roboto.svg" alt="Roboto Logo">
             <h1>Roboto</h1>
         </div>
-        <nav>
+        <nav v-if="width > 850">
             <ul>
                 <li @click="homeLink" v-on:mouseover="handleHover(0)" v-on:mouseout='handleMouseOut'>home</li>
                 <li @click="$emit('modal', 'search')" v-on:mouseover="handleHover(1)" v-on:mouseout='handleMouseOut'>search</li>
@@ -34,6 +34,11 @@
             </ul>
             <div class="nav--hover nav--hover--effect"></div>
         </nav>
+        <div v-else @click="openResponsiveMenu" class="menu">
+            <div class="menu__line"></div>
+            <div class="menu__line"></div>
+            <div class="menu__line"></div>
+        </div>
     </header>
 </template>
 
@@ -44,11 +49,23 @@ export default {
     name: 'Header',
     data() {
         return {
+            width: null,
             isProfileDropDownOpened: false
         }
     },
-    /* eslint-disable no-console */
+    mounted() {
+        window.addEventListener('resize', this.changeWidth);
+    },
+    beforeDestroy() {
+        window.removeEventListener('resize', this.changeWidth);
+    },
     methods: {
+        openResponsiveMenu() {
+            this.$emit('menu', 'open');
+        },
+        changeWidth() {
+            this.width = window.innerWidth;
+        },
         homeLink() {
             this.$router.push({ path: '/' });
         },
@@ -90,6 +107,7 @@ export default {
 
 <style lang='scss'>
     @import '../scss/variables.scss';
+    @import '../scss/mixins.scss';
 
     header {
         max-width: 1800px;
@@ -204,6 +222,65 @@ export default {
 
             .nav--hover--effect {
                 transition: 250ms ease-in-out;
+            }
+        }
+
+        .menu {
+            cursor: pointer;
+
+            .menu__line {
+                margin: 4px 0;
+                width: 25px;
+                height: 3px;
+                border-radius: 10px;
+                background-color: black;
+            }
+
+            .first {
+                animation: first 150ms 1 normal ease-in-out forwards;    
+                transform-origin: right;
+            }
+            .first--reverse {
+                animation: first 150ms 1 reverse ease-in-out forwards;    
+                transform-origin: right;
+            }
+            @keyframes first {
+                0% {
+                    transform: scaleX(1);
+                }
+                100% {
+                    transform: scaleX(0);
+                }
+            }
+            .second {
+                animation: second 100ms 200ms 1 normal ease-in-out forwards; 
+            }
+            .second--reverse {
+                animation: second 100ms 200ms 1 reverse ease-in-out forwards; 
+            }
+            @keyframes second {
+                0% {
+                    transform: scaleX(1);
+                }
+                100% {
+                    transform: scaleX(0);
+                }
+            }
+            .third {
+                animation: third 150ms 1 normal ease-in-out forwards; 
+                transform-origin: left;
+            }
+            .third--reverse {
+                animation: third 150ms 1 reverse ease-in-out forwards; 
+                transform-origin: left;
+            }
+            @keyframes third {
+                0% {
+                    transform: scaleX(1);
+                }
+                100% {
+                    transform: scaleX(0);
+                }
             }
         }
     }

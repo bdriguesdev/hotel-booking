@@ -114,7 +114,6 @@ export default {
                     background-color: $input-bg-color;
                     border: none;
                     width: 249px;
-                    padding-left: 12px;
                     height: 42px;
                     border-bottom: 2px solid $secondary-color-two;
                     outline: none;
@@ -125,10 +124,6 @@ export default {
                     @include small-phone {
                         width: 220px;
                     }
-                }
-
-                input[type=date] {
-                    height: 44px;
                 }
 
                 .search__input--range {
@@ -142,9 +137,6 @@ export default {
                         }
                     }
 
-                    input:last-child {
-                        margin-right: 30px;
-                    }
                 }
             }
 
