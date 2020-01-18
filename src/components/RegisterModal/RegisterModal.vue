@@ -1,12 +1,12 @@
 <template>
-    <div class="register__modal" @click="closeModal">
+    <div class="register__modal" @mousedown="closeModal">
         <div class="register__modal__content">
             <nav class="register__nav">
                 <ul>
                     <li v-on:click="changeOption('business')" >Business</li>
                     <li v-on:click="changeOption('client')" >Client</li>
                 </ul>
-                <svg v-on:click="$emit('modal', 'register')" width="17" height="17" viewBox="0 0 17 17" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <svg @click="$emit('modal', 'register')" width="17" height="17" viewBox="0 0 17 17" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M1 1L8.5 8.5M16 16L8.5 8.5M8.5 8.5L16 1L1 16" stroke='white' stroke-width="2"/>
                 </svg>
             </nav>

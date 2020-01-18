@@ -1,5 +1,5 @@
 <template>
-    <div class="rooms__create__modal" @click="closeModal">
+    <div class="rooms__create__modal" @mousedown="closeModal">
         <div class="rooms__create__modal__content">
             <nav class="rooms__create__nav">
                 <ul>

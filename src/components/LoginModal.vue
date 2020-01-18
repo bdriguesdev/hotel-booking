@@ -1,5 +1,5 @@
 <template>
-    <div class="login__modal" @click="closeModal">
+    <div class="login__modal" @mousedown="closeModal">
         <div class="login__modal__content">
             <nav class="login__nav">
                 <ul>

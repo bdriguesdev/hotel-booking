@@ -4,7 +4,6 @@ const state = {
     rooms: null,
     hotelRooms: null,
     room: null,
-    error: null,
     roomLoading: false
 };
 

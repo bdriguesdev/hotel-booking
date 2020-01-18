@@ -1,5 +1,5 @@
 <template>
-    <div class="search__modal" @click="closeModal">
+    <div class="search__modal" @mousedown="closeModal">
         <div class="search__modal__content">
             <nav class="search__nav">
                 <ul>

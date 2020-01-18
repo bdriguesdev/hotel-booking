@@ -7,6 +7,7 @@ import hotelsModule from './modules/hotels';
 import roomsModule from './modules/rooms';
 import searchModule from './modules/search';
 import bookingModule from './modules/booking';
+import errorModule from './modules/error';
 
 Vue.use(Vuex);
 Vue.use(VueRouter);
@@ -17,6 +18,7 @@ export default new Vuex.Store({
         hotelsModule,
         roomsModule,
         searchModule,
-        bookingModule
+        bookingModule,
+        errorModule
     }
 });

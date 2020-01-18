@@ -54,6 +54,7 @@ export default {
         }
     },
     mounted() {
+        this.changeWidth();
         window.addEventListener('resize', this.changeWidth);
     },
     beforeDestroy() {

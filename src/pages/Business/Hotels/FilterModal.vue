@@ -1,5 +1,5 @@
 <template>
-    <div class="hotels__filter__modal" @click="closeModal">
+    <div class="hotels__filter__modal" @mousedown="closeModal">
         <div class="hotels__filter__modal__content">
             <nav class="hotels__filter__nav">
                 <ul>

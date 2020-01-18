@@ -1,3 +1,5 @@
+from backend.exceptions import CustomException
+
 def textValidator(text, maxLen, minLen = 1):
     #returns text that only contains 0-9 / a-z / A-Z or raise a Exception
 
@@ -28,20 +30,17 @@ def textValidator(text, maxLen, minLen = 1):
     return text
 
 def passwordValidator(passw):
-    if len(passw) > 55 or len(passw) < 8 or not(isinstance(passw, str)):
-        return Exception
-    else:
-        for x in range(0, len(passw)):
-            asciinum = ord(passw[x])
-            #48-57(0-9) 65-90(A-Z) 97-122(a-z)
-            if asciinum < 48:
-                return Exception
-            elif asciinum > 57 and asciinum < 65:
-                return Exception
-            elif asciinum > 90 and asciinum < 97:
-                return Exception
-            elif asciinum > 122:
-                return Exception
+    for x in range(0, len(passw)):
+        asciinum = ord(passw[x])
+        #48-57(0-9) 65-90(A-Z) 97-122(a-z)
+        if asciinum < 48:
+            raise CustomException('You need to send a valid password.')
+        elif asciinum > 57 and asciinum < 65:
+            raise CustomException('You need to send a valid password.')
+        elif asciinum > 90 and asciinum < 97:
+            raise CustomException('You need to send a valid password.')
+        elif asciinum > 122:
+            raise CustomException('You need to send a valid password.')
     return passw
 
 def birthdayValidator(birth):
@@ -75,7 +74,7 @@ def emailValidator(email):
     indexOfSign = -1 #index of -> @ <-
 
     if len(email) > 50 or not(isinstance(email, str)) or len(email) < 5: 
-        raise Exception('You need to send a valid email.')
+        raise CustomException('You need to send a valid email.')
 
     # 46(.) 48-57(0-9) 65-90(A-Z) 95(_) 97-122(a-z)
     for x in range(0, len(email)):
@@ -84,24 +83,25 @@ def emailValidator(email):
             indexOfSign = x
         elif asciinum < 48:
             if asciinum != 46:
-                raise Exception('You need to send a valid email.')
+                raise CustomException('You need to send a valid email.')
         elif asciinum > 57 and asciinum < 65:
-            raise Exception('You need to send a valid email.')
+            raise CustomException('You need to send a valid email.')
         elif asciinum > 90 and asciinum < 97:
             if asciinum != 95:
-                raise Exception('You need to send a valid email.')
+                raise CustomException('You need to send a valid email.')
         elif asciinum > 122:
-            raise Exception('You need to send a valid email.')
+            raise CustomException('You need to send a valid email.')
 
     if indexOfSign == -1:
-        raise Exception('You need to send a valid email.')
+        raise CustomException('You need to send a valid email.')
 
     return email
 
 def stateValidator(state):
     states_dict = { "RJ": "Rio de Janeiro", "RS": "Rio Grande do Sul", "SP": "São Paulo" }
 
-    states_dict[state]
+    if not(state in states_dict):
+        raise CustomException("You need to choose one of these states: RJ, SP or SP.")
 
     return state
 

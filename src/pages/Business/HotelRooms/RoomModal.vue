@@ -1,5 +1,5 @@
 <template>
-    <div class="room__modal" @click="closeModal">
+    <div class="room__modal" @mousedown="closeModal">
         <div class="room__modal__content">
             <nav class="room__nav">
                 <svg v-if="bookingInformationOpen" @click="handleModal" class='arrow__back' width="24" height="16" viewBox="0 0 24 16" fill="none" xmlns="http://www.w3.org/2000/svg">

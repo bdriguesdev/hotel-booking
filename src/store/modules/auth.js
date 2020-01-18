@@ -1,8 +1,7 @@
 const state = {
     token: null,
     user: null,
-    userType: null,
-    error: null
+    userType: null
 };
 
 const mutations = {
@@ -21,7 +20,7 @@ const mutations = {
 };
 
 const actions = {   
-    login({ commit }, { userEmail, userPassword, userType }) {
+    login({ commit, dispatch }, { userEmail, userPassword, userType }) {
         let requestBody = {
             userEmail,
             userPassword,
@@ -36,13 +35,15 @@ const actions = {
         }).then(data => {
             return data.json();
         }).then(data => {
-            commit('SET_TOKEN', data.token);
-            commit('SET_USER', data.user);
-            commit('SET_USERTYPE', userType);
-        }).catch(err => {
-            // eslint-disable-next-line
-            console.log(err);
-            commit('SET_ERROR', err.message);
+            if(data.error) {
+                dispatch('changeError', data.error);
+            } else {
+                commit('SET_TOKEN', data.token);
+                commit('SET_USER', data.user);
+                commit('SET_USERTYPE', userType);
+            }
+        }).catch(() => {
+            dispatch('changeError', 'An error has been occurred.');
         });
     },
     logout({ commit }) {
@@ -50,7 +51,6 @@ const actions = {
         commit('SET_USER', null);
     },
     createClient({ commit, dispatch }, { firstName, lastName, email, birthday, state, city, password }) {
-        //NEED TO GET THE INFO HERE
         let bodyRequest = {
             firstName,
             lastName,
@@ -70,14 +70,17 @@ const actions = {
         }).then(data => {
             return data.json();
         }).then(data => {
-            commit('SET_TOKEN', data.token);
-            commit('SET_USER', data.user);
-            if(data.first_name) {
+            if (data.error) {
+                //eslint-disable-next-line
+                console.log(data.error);
+                dispatch('changeError', data.error);
+            } else {
+                commit('SET_TOKEN', data.token);
+                commit('SET_USER', data.user);
                 dispatch('login', { userEmail: email, userPassword: password, userType: 'Client' });
             }
-        }).catch(err => {
-            // eslint-disable-next-line
-            console.log(err);
+        }).catch(() => {
+            dispatch('changeError', 'An error has been occurred.');
         });
     },
     createBusiness({ commit, dispatch }, { name, email, state, city, password }) {

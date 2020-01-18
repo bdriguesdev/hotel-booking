@@ -7,19 +7,13 @@ import datetime
 import pytz
 import jwt
 
+from backend.exceptions import CustomException
 from ..validators import passwordValidator, birthdayValidator, emailValidator, stateValidator, cityValidator
 from .models import Client, Business
 from .serializers import ClientSerializer, BusinessSerializer
 
-class Test(APIView):
-    def post(self, request):
-        test = request.authorized
-        # print(request.authorized[0]['first_name'])
-        return Response('test')
-
 class Login(APIView):
     def post(self, request):
-        # Time inside the token?
         try:
             user_email = emailValidator(request.data['userEmail']) 
             user_password = passwordValidator(request.data['userPassword'])
@@ -27,22 +21,24 @@ class Login(APIView):
             serializer = None
             if user_type == 'Client':
                 client = Client.objects.get(email=user_email)
-                # if not(check_password(user_password, client.password)):
-                #     raise Exception
+                if not(check_password(user_password, client.password)):
+                    raise CustomException('Incorrect email/password.')
                 serialiazer = ClientSerializer(client)
                 token = jwt.encode({ "userId": client.id, "userEmail":client.email }, 'secret', algorithm='HS256')
             elif user_type == 'Business':
                 business = Business.objects.get(email=user_email)
                 if not(check_password(user_password, business.password)):
-                    raise Exception
+                    raise CustomException('Incorrect email/password.')
                 serialiazer = BusinessSerializer(business)
                 token = jwt.encode({ "userId": business.id, "userEmail": business.email }, 'secret', algorithm='HS256')
             else:
                 raise Exception
             
             return Response({ "token": token, "user": serialiazer.data })
+        except CustomException as err:
+            return Response({ "error": str(err)})
         except Exception:
-            return Response('Send a valid email/password.')
+            return Response({ "error": 'An error has been occurred.' })
 
 class CreateClient(APIView):
     def post(self, request):
@@ -62,8 +58,10 @@ class CreateClient(APIView):
             serializer = ClientSerializer(client)
 
             return Response(serializer.data)
+        except CustomException as err:
+            return Response({ "error": str(err) })
         except Exception:
-            return Response('Send a valid data.')
+            return Response({ "error": 'An error has been occured.' })
         
 class CreateBusiness(APIView):
     def post(self, request):
