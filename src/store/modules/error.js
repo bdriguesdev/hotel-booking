@@ -1,10 +1,10 @@
 const state = {
-    error: null
+    errorMsg: null
 };
 
 const mutations = {
     SET_ERROR(state, value) {
-        state.error = value;
+        state.errorMsg = value;
     }
 };
 
@@ -15,7 +15,7 @@ const actions = {
 }
 
 const getters = {
-    error: state => state.error
+    errorMsg: state => state.errorMsg
 }
 
 const errorModule = {

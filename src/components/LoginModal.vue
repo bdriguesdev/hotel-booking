@@ -40,14 +40,11 @@
 </template>
 
 <script>
-import validate from 'validate.js';
 import { mapGetters } from 'vuex';
 
 export default {
-    //need to use the nav to select between client/business
     name: 'LoginModal',
     mounted() {
-        /* eslint-disable no-console */
         const modal = document.querySelector('.login__modal');
         modal.style.height = document.documentElement.scrollHeight + "px";
     },
@@ -86,26 +83,6 @@ export default {
         ...mapGetters([
             'token'
         ])
-    },
-    watch: {
-        email(newValue) {
-            const loginInput = document.getElementById('login__email');
-            const validationResult = validate.single(newValue, { presence: true, email: true });
-            if(!validationResult) {  
-                loginInput.style.borderColor = '#FF1E1E';
-            } else {
-                loginInput.style.borderColor = '#000000';
-            }
-        },
-        password(newValue) {
-            const passwordInput = document.getElementById('login__password');
-            const validationResult = validate.single(newValue, { presence: true, length: { minimum: 8, maximum: 55 } });
-            if(!validationResult) {
-                passwordInput.style.borderColor = '#FF1E1E';
-            } else {
-                passwordInput.style.borderColor = '#000000';
-            }
-        }
     }
 }
 </script>

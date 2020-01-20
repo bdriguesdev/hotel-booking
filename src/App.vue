@@ -7,6 +7,7 @@
     <LoginModal v-on:modal="modal" v-if="isLoginModalOpen && !token" />
     <SearchModal v-on:modal="modal" v-if="isSearchModalOpen" />
     <ResponsiveMenu @menu="openCloseMenu" v-on:modal="modal" />
+    <ErrorModal v-if="errorMsg" />
   </div>
 </template>
 
@@ -19,6 +20,7 @@ import SearchModal from './components/SearchModal/SearchModal';
 import ClientProfileModal from './pages/Client/Profile/Index';
 import BusinessProfileModal from './pages/Business/Profile/Index';
 import ResponsiveMenu from './components/ResponsiveMenu';
+import ErrorModal from './components/ErrorModal';
 
 export default {
   /* eslint-disable no-console */
@@ -29,7 +31,8 @@ export default {
     SearchModal,
     ClientProfileModal,
     BusinessProfileModal,
-    ResponsiveMenu
+    ResponsiveMenu,
+    ErrorModal
   },
   data() {
     return {
@@ -42,8 +45,12 @@ export default {
   computed: {
     ...mapGetters([
       'token',
-      'userType'
+      'userType',
+      'errorMsg'
     ])
+  },
+  mounted() {
+    console.log(this.error);
   },
   methods: {
     openCloseMenu(type) {
