@@ -8,6 +8,7 @@
     <SearchModal v-on:modal="modal" v-if="isSearchModalOpen" />
     <ResponsiveMenu @menu="openCloseMenu" v-on:modal="modal" />
     <ErrorModal v-if="errorMsg" />
+    <Footer />
   </div>
 </template>
 
@@ -21,6 +22,7 @@ import ClientProfileModal from './pages/Client/Profile/Index';
 import BusinessProfileModal from './pages/Business/Profile/Index';
 import ResponsiveMenu from './components/ResponsiveMenu';
 import ErrorModal from './components/ErrorModal';
+import Footer from './components/Footer';
 
 export default {
   /* eslint-disable no-console */
@@ -32,7 +34,8 @@ export default {
     ClientProfileModal,
     BusinessProfileModal,
     ResponsiveMenu,
-    ErrorModal
+    ErrorModal,
+    Footer
   },
   data() {
     return {
