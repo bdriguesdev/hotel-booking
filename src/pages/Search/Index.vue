@@ -32,7 +32,6 @@ import { mapGetters } from 'vuex';
 import Header from '../../components/Header';
 import RoomSlide from './RoomSlide';
 import HotelSlide from './HotelSlide';
-/* eslint-disable no-console */
 
 export default {
     name: 'Search',
@@ -51,19 +50,28 @@ export default {
         //title animation
         setTimeout(()=> { this.titleAnimation(); }, 1);
         const section = document.querySelector('.search__container');
-        this.sectionWidth = section.getBoundingClientRect().width;
-        window.addEventListener('resize', () => {
-            this.sectionWidth = section.getBoundingClientRect().width;
-        });
+        this.cardSlidePosition(section.getBoundingClientRect().width);
+        window.addEventListener('resize', this.changeSectionWidth);
+    },
+    updated() {
+        const section = document.querySelector('.search__container');
+        this.cardSlidePosition(section.getBoundingClientRect().width);
+    },
+    beforeDestroy() {
+        window.removeEventListener('resize', this.changeSectionWidth);
     },
     methods: {
+        changeSectionWidth() {
+            const section = document.querySelector('.search__container');
+            this.sectionWidth = section.getBoundingClientRect().width;
+        },
         titleAnimation() {
             this.isSectionTitleAnimated = true;
 
             const titleNumberContainer = document.querySelector('.search__number--container');
             const titleNumber = document.querySelector('.search__number');
             titleNumberContainer.style.width = titleNumberContainer.getBoundingClientRect().width * titleNumber.innerHTML.length + 'px';
-            titleNumber.style.top = '-43px';
+            titleNumber.style.top = '-42px';
 
             const titleNumberBorder = document.querySelector('.search__number--border');
             titleNumberBorder.style.width = '100%';
@@ -78,6 +86,27 @@ export default {
             titleTextBorder.style.transition = '800ms ease-in-out';
             titleTextBorder.style.width = titleNumberBorderWidth + 'px';
             titleTextBorder.style.minWidth = titleNumberBorderMinWidth + 'px';
+        },
+        cardSlidePosition(newValue) {
+            let slideContainers;
+            let slideImg;
+            if(this.searchType === 'room') {
+                slideContainers = document.querySelectorAll('.room__search__slide .search__slide__imgs');
+                slideImg = document.querySelector('.room__search__slide .search__slide__imgs img');
+            } else if(this.searchType === 'hotel') {
+                slideContainers = document.querySelectorAll('.hotel__search__slide .search__slide__imgs');
+                slideImg = document.querySelector('.hotel__search__slide .search__slide__imgs img');
+            }
+
+            let leftValue = (newValue - slideContainers[0].getBoundingClientRect().width ) / 2;
+            if(this.card === 1) {
+                leftValue += slideImg.offsetLeft * 2 + slideImg.getBoundingClientRect().width;
+            } else if(this.card === 3) {
+                leftValue += slideImg.offsetLeft * 2 + slideImg.getBoundingClientRect().width;
+            }
+            for(let x = 0; x < slideContainers.length; x++) {
+                slideContainers[x].style.left = leftValue + 'px';
+            }
         }
     },
     computed: {
@@ -96,26 +125,15 @@ export default {
     },
     watch: {
         sectionWidth(newValue) {
-            const slideContainer = document.querySelectorAll('.search__slide__imgs');
-            const slideImg = document.querySelector('.search__slide__imgs img');
-            let leftValue = (newValue - slideContainer[0].getBoundingClientRect().width ) / 2;
-
-            if(this.card === 1) {
-                leftValue += slideImg.offsetLeft * 2 + slideImg.getBoundingClientRect().width;
-            } else if(this.card === 3) {
-                leftValue += slideImg.offsetLeft * 2 + slideImg.getBoundingClientRect().width;
-            }
-            for(let x = 0; x < slideContainer.length; x++) {
-                slideContainer[x].style.left = leftValue + 'px';
-            }
-            
-        },
+            this.cardSlidePosition(newValue);
+        }
     }
 }
 </script>
 
 <style lang="scss">
     @import '../../scss/variables.scss';
+    @import '../../scss/mixins.scss';
 
     .search__content {
         max-width: 2000px;
@@ -131,6 +149,9 @@ export default {
             justify-content: flex-start;
             margin-bottom: 61px;
             margin-left: 5%;
+            @include small-phone {
+                flex-direction: column;
+            }
 
             .search__number--container {
                 width: 87px;
@@ -171,12 +192,18 @@ export default {
                     margin-left: 10px;
                     font-size: 1.875rem;
                     font-weight: 400;
+                    @include large-phone {
+                        font-size: 1.7rem;
+                    }
 
                     span {
                         color: $secondary-color-two;
                         font-size: 1.875rem;
                         font-weight: 300;
                         font-family: $secondary-font;
+                        @include large-phone {
+                            font-size: 1.7rem;
+                        }
                     }
                 }
 
@@ -184,6 +211,7 @@ export default {
                     min-width: 80%;
                     visibility: hidden;
                     width: 267px;
+                    max-width: 95%;
                     height: 3px;
                     background-color: $secondary-color-two;
                 }

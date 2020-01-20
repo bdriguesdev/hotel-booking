@@ -1,5 +1,5 @@
 <template>
-    <div class="search__slide" >
+    <div class="room__search__slide" >
         <div class="search__slide__imgs">
             <div alt="Slide image one" class="search__img" :style="room.photos[0]? { backgroundImage: `url('http://127.0.0.1:8000${room.photos[0].photo}')` }: {}"></div>
             <div alt="Slide image two" class="search__img" :style="room.photos[1]? { backgroundImage: `url('http://127.0.0.1:8000${room.photos[1].photo}')` }: {}"></div>
@@ -42,7 +42,6 @@
 
 <script>
 export default {
-    /* eslint-disable no-console */
     name: 'RoomSlide',
     data() {
         return {
@@ -147,8 +146,9 @@ export default {
 
 <style lang='scss'>
     @import '../../scss/variables.scss';
+    @import '../../scss/mixins.scss';
 
-    .search__slide {
+    .room__search__slide {
         position: relative;
         margin-bottom: 80px;
 
@@ -158,6 +158,15 @@ export default {
             position: relative;
             left: -180px;
             width: 2280px;
+            @include large-phone {
+                width: 1590px;
+            }
+            @include medium-phone {
+                width: 1290px;
+            }
+            @include small-phone {
+                width: 930px;
+            }
 
             .search__img {
                 background-image: url('../../assets/Room_card_one.jpg');
@@ -166,6 +175,21 @@ export default {
                 width: 600px;
                 height: 338px;
                 margin: 0 80px;
+                @include large-phone {
+                    width: 450px;
+                    height: 260px;
+                    margin: 0 40px;
+                }
+                @include medium-phone {
+                    width: 370px;
+                    height: 245px;
+                    margin: 0 30px;
+                }
+                @include small-phone {
+                    width: 270px;
+                    height: 180px;
+                    margin: 0 20px;
+                }
             }
         }
 
@@ -176,6 +200,15 @@ export default {
             box-shadow: 0 0 10px rgba(0,0,0,0.15);
             transition: none;
             cursor: pointer;
+            @include large-phone {
+                width: 450px;
+            }
+            @include medium-phone {
+                width: 370px;
+            }
+            @include small-phone {
+                width: 270px;
+            }
 
             .search__text--part-one {
                 display: flex;
@@ -242,6 +275,9 @@ export default {
                     font-weight: 300;
                     overflow-y: hidden;
                     height: 50px;
+                    @include desktop {
+                        height: 45px;
+                    }
                 }
 
                 span {

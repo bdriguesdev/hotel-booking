@@ -49,9 +49,6 @@ export default {
       'errorMsg'
     ])
   },
-  mounted() {
-    console.log(this.error);
-  },
   methods: {
     openCloseMenu(type) {
       const menuNav = document.querySelector('.responsive-nav');
