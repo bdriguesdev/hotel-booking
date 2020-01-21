@@ -68,7 +68,14 @@ export default {
             this.width = window.innerWidth;
         },
         homeLink() {
-            this.$router.push({ path: '/' });
+            const path = '/' 
+            if(this.$route.path !== path) this.$router.push({ path });
+            else {
+                this.$router.push({ path: '/abcd' });
+                setTimeout(() => {
+                    this.$router.push({ path });
+                }, 1);
+            }
         },
         logout() {
             this.$store.dispatch('logout').authModule;
@@ -76,7 +83,13 @@ export default {
             this.$router.push({ path: '/' });
         },
         navigate(path) {
-            this.$router.push(path);
+            if(this.$route.path !== path.path) this.$router.push(path);
+            else {
+                this.$router.push({ path: '/abcd' });
+                setTimeout(() => {
+                    this.$router.push(path);
+                }, 1);
+            }
         },
         handleHover(liNum) {
             const navElements = document.querySelectorAll('nav ul li');
