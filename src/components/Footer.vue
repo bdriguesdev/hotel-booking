@@ -25,11 +25,13 @@ export default {
     methods: {
         changePage(path) {
             if(this.$route.path === path) {
+                window.scrollTo(0,0);
                 this.$router.push({ path: '/abcd' });
                 setTimeout(() => {
                     this.$router.push({ path });
                 }, 1);
             } else {
+                window.scrollTo(0,0);
                 this.$router.push({ path });
             }
         },

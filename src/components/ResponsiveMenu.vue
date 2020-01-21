@@ -19,12 +19,12 @@
             <li v-if="token" class="link">
                 <span @click="openCloseDropdown" >profile</span>
                 <div v-if="userType === 'Client' && isProfileDropdownOpened" class="profile-options">
-                    <span>settings</span>
+                    <span @click="openModal('profile')">settings</span>
                     <span @click="pushRouter({ path: '/client/bookings/' })">bookings</span>
                     <span @click="handleLogout">logout</span>
                 </div>
                 <div v-if="userType === 'Business' && isProfileDropdownOpened" class="profile-options">
-                    <span>settings</span>
+                    <span @click="openModal('profile')">settings</span>
                     <span @click="pushRouter({ path: '/business/hotels/' })">hotels</span>
                     <span @click="handleLogout">logout</span>
                 </div>
