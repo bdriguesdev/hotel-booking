@@ -19,6 +19,7 @@ class Login(APIView):
             user_password = passwordValidator(request.data['userPassword'])
             user_type = request.data['userType']
             serializer = None
+            
             if user_type == 'Client':
                 client = Client.objects.get(email=user_email)
                 if not(check_password(user_password, client.password)):

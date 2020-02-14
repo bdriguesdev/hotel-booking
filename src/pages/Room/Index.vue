@@ -231,8 +231,7 @@ export default {
     .room__content {
         width: 90%;
         max-width: 1070px;
-        margin: 0 auto;
-        margin-top: 100px;
+        margin: 100px auto;
         
         .room__slide {
             display: flex;

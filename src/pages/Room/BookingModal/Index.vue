@@ -31,7 +31,7 @@
                             <span class="booking__price-per-night">${{ room.price }}</span>
                         </div>
                         <div class="booking__price__info">
-                            <span class="booking__price__text">Nights booked</span>
+                            <span class="booking__price__text">Days booked</span>
                             <div class="booking__price-line"></div>
                             <span class="booking__nights">x{{ transformDateToNights }}</span>
                         </div>

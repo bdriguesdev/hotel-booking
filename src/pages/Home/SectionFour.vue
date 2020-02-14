@@ -115,8 +115,7 @@ export default {
     .join__container {
         max-width: 1800px;
         width: 90%;
-        margin: 0 auto;
-        margin-top: 100px;
+        margin: 100px auto;
         position: relative;
 
         .join__main-title {

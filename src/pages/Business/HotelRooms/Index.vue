@@ -142,8 +142,7 @@ export default {
     .business__rooms__content {
         max-width: 1800px;
         width: 90%;
-        margin: 0 auto;
-        margin-top: 100px;
+        margin: 100px auto;
 
         .business__rooms__title {
             display: flex;

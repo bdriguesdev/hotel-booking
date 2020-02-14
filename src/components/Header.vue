@@ -130,7 +130,7 @@ export default {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        margin-top: 15px;
+        padding-top: 15px;
 
         .logo {
             display: flex;

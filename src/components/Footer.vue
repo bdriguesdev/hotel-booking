@@ -83,6 +83,7 @@ export default {
 
     .footer {
         max-width: 1920px;
+        width: 100%;
         margin: 0 auto;
         padding: 50px 0 40px 0;
         margin-top: 100px;
@@ -91,6 +92,7 @@ export default {
         flex-direction: column;
         justify-content: center;
         align-items: center;
+        margin-top: auto;
         @include medium-phone {
             margin-top: 350px;
         }

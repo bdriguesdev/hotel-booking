@@ -189,8 +189,7 @@ export default {
     .hotel__content {
         width: 90%;
         max-width: 1070px;
-        margin: 0 auto;
-        margin-top: 100px;
+        margin: 100px auto;
         
         .hotel__slide {
             display: flex;
