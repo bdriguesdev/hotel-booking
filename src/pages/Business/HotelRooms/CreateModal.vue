@@ -177,7 +177,8 @@ export default {
                         input {
                             background-color: $input-bg-color;
                             border: none;
-                            width: 263px;
+                            width: 243px;
+                            padding: 0 10px;
                             height: 42px;
                             border-bottom: 2px solid $secondary-color-two;
                             outline: none;
